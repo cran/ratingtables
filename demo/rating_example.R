@@ -1,0 +1,5 @@
+library(ratingtables)
+ex <- example_rating_plan()
+res <- rate_policies_with_trace(ex$policies, ex$plan)
+print(res$rated_data)
+print(trace_to_excel_style(res$term_trace))
