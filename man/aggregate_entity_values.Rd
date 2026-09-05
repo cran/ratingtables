@@ -46,6 +46,12 @@ Aggregate one or more numeric values from entity-level records to a parent
 or group level. This can be used, for example, to average driver factors or
 sum premiums for boats or scheduled items.
 }
+\details{
+Common \code{"sum"}, \code{"mean"}, and \code{"count"} aggregations are performed in
+grouped vectorized passes rather than repeatedly subsetting the entity data
+once per parent group. Other supported aggregations reuse a single set of
+precomputed group indices.
+}
 \examples{
 rated_drivers <- data.frame(
   policy_id = c("P1", "P1", "P2"),

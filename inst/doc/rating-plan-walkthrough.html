@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>A Worked Auto Driver Averaging Rating Plan with ratingtables</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">A Worked Auto Driver Averaging Rating Plan
+with ratingtables</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ratingtables)</span></code></pre></div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This vignette builds a compact but fairly complete personal-auto
+rating example. The purpose is not to recommend a particular rate plan.
+Instead, the example shows how <code>ratingtables</code> can represent
+and execute a range of common rating structures while keeping the factor
+data separate from the calculation order.</p>
+<p>The example has two coverages, <code>&quot;BI&quot;</code> and
+<code>&quot;CL&quot;</code>.</p>
+<p>Driver-level rating uses four multiplicative factors:</p>
+<ul>
+<li>gender;</li>
+<li>marital status;</li>
+<li>driver age; and</li>
+<li>prior chargeable claims.</li>
+</ul>
+<p>Each driver receives an indicated factor for each coverage. Driver
+factors are then averaged by household and joined to the vehicle
+records.</p>
+<p>Vehicle-level rating uses:</p>
+<ol style="list-style-type: decimal">
+<li>a base rate;</li>
+<li>territory;</li>
+<li>the household average driver factor;</li>
+<li>credit;</li>
+<li>underwriting level;</li>
+<li>an interpolated vehicle-value factor;</li>
+<li>a continuous additive geographic-score charge;</li>
+<li>a continuous multiplicative mileage adjustment;</li>
+<li>a custom high-score surcharge;</li>
+<li>a custom composite-risk adjustment;</li>
+<li>an additive expense fee;</li>
+<li>a Collision deductible/coverage-option factor; and</li>
+<li>final rounding.</li>
+</ol>
+<p>The example concludes by applying rate-change caps to a small number
+of coverage records and by inspecting the calculation trace.</p>
+</div>
+<div id="a-helper-for-building-factor-table-rows" class="section level2">
+<h2>A helper for building factor-table rows</h2>
+<p><code>ratingtables</code> stores rating values in a normalized
+long-format factor table. For this example all table-based terms are
+either constants or one-way factors, so only one variable/level slot is
+needed.</p>
+<p>The following small helper keeps the example code readable.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>coverages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;BI&quot;</span>, <span class="st">&quot;CL&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>make_factor_rows <span class="ot">&lt;-</span> <span class="cf">function</span>(term_name,</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>                             coverage,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>                             term_value,</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                             <span class="at">variable =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                             <span class="at">level =</span> <span class="cn">NA_character_</span>) {</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(term_value)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(coverage) <span class="sc">==</span> <span class="dv">1</span><span class="dt">L</span>) {</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>    coverage <span class="ot">&lt;-</span> <span class="fu">rep</span>(coverage, n)</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  }</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(variable) <span class="sc">==</span> <span class="dv">1</span><span class="dt">L</span>) {</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>    variable <span class="ot">&lt;-</span> <span class="fu">rep</span>(variable, n)</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  }</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(level) <span class="sc">==</span> <span class="dv">1</span><span class="dt">L</span>) {</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    level <span class="ot">&lt;-</span> <span class="fu">rep</span>(level, n)</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  }</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    <span class="at">coverage =</span> <span class="fu">as.character</span>(coverage),</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    <span class="at">term_name =</span> <span class="fu">rep</span>(term_name, n),</span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    <span class="at">term_value =</span> <span class="fu">as.numeric</span>(term_value),</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>    <span class="at">variable1 =</span> <span class="fu">as.character</span>(variable),</span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    <span class="at">level1 =</span> <span class="fu">as.character</span>(level),</span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>  )</span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="driver-level-rating" class="section level2">
+<h2>Driver-level rating</h2>
+<div id="driver-factor-table" class="section level3">
+<h3>Driver factor table</h3>
+<p>The driver plan uses ordinary multiplicative rating factors. The
+factors are intentionally simple and are included only to illustrate the
+workflow.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>driver_factor_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="co"># Gender</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="st">&quot;gender&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.07</span>, <span class="fl">0.98</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>    <span class="st">&quot;gender&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  ),</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="st">&quot;gender&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.04</span>, <span class="fl">0.99</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>    <span class="st">&quot;gender&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  ),</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="co"># Marital status</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="st">&quot;marital_status&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.08</span>, <span class="fl">0.96</span>),</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>    <span class="st">&quot;marital_status&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;single&quot;</span>, <span class="st">&quot;married&quot;</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  ),</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>    <span class="st">&quot;marital_status&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.05</span>, <span class="fl">0.97</span>),</span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>    <span class="st">&quot;marital_status&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;single&quot;</span>, <span class="st">&quot;married&quot;</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a>  ),</span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a>  <span class="co"># Driver age</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>    <span class="st">&quot;driver_age&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.40</span>, <span class="fl">1.08</span>, <span class="fl">1.00</span>, <span class="fl">1.06</span>),</span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>    <span class="st">&quot;driver_age&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;18_24&quot;</span>, <span class="st">&quot;25_39&quot;</span>, <span class="st">&quot;40_64&quot;</span>, <span class="st">&quot;65_plus&quot;</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>  ),</span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>    <span class="st">&quot;driver_age&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">1.30</span>, <span class="fl">1.06</span>, <span class="fl">1.00</span>, <span class="fl">1.05</span>),</span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>    <span class="st">&quot;driver_age&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;18_24&quot;</span>, <span class="st">&quot;25_39&quot;</span>, <span class="st">&quot;40_64&quot;</span>, <span class="st">&quot;65_plus&quot;</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>  ),</span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>  <span class="co"># Prior chargeable claims</span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>    <span class="st">&quot;prior_chargeable_claims&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">1.15</span>, <span class="fl">1.35</span>),</span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>    <span class="st">&quot;prior_chargeable_claims&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;2_plus&quot;</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a>  ),</span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a>    <span class="st">&quot;prior_chargeable_claims&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.96</span>, <span class="fl">1.12</span>, <span class="fl">1.30</span>),</span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a>    <span class="st">&quot;prior_chargeable_claims&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;2_plus&quot;</span>)</span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a>  )</span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a>)</span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="fu">head</span>(driver_factor_table)</span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt;   coverage      term_name term_value      variable1  level1</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; 1       BI         gender       1.07         gender       M</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; 2       BI         gender       0.98         gender       F</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; 3       CL         gender       1.04         gender       M</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt; 4       CL         gender       0.99         gender       F</span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt; 5       BI marital_status       1.08 marital_status  single</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt; 6       BI marital_status       0.96 marital_status married</span></span></code></pre></div>
+</div>
+<div id="driver-rating-specification" class="section level3">
+<h3>Driver rating specification</h3>
+<p>The rating specification defines the calculation order separately
+from the factor values. Every driver term in this example is an exact
+factor lookup applied multiplicatively.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>driver_spec <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="at">coverage =</span> <span class="fu">rep</span>(coverages, <span class="at">each =</span> <span class="dv">4</span>),</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="at">step_number =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">times =</span> <span class="fu">length</span>(coverages)),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="at">term_name =</span> <span class="fu">rep</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="fu">c</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>      <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>      <span class="st">&quot;marital_status&quot;</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>      <span class="st">&quot;driver_age&quot;</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>      <span class="st">&quot;prior_chargeable_claims&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>    ),</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>    <span class="at">times =</span> <span class="fu">length</span>(coverages)</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  ),</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="at">value_source =</span> <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="at">calculation_type =</span> <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>driver_plan <span class="ot">&lt;-</span> <span class="fu">new_rating_plan</span>(</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>  <span class="at">factor_table =</span> driver_factor_table,</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>  <span class="at">rating_spec =</span> driver_spec,</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  <span class="at">coverages =</span> coverages,</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>  <span class="at">max_vars =</span> <span class="dv">1</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  <span class="at">policy_id_col =</span> <span class="st">&quot;driver_id&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="driver-data" class="section level3">
+<h3>Driver data</h3>
+<p>There are ten drivers belonging to five households. Some households
+have more than one driver, which allows the entity-aggregation workflow
+to be shown.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>drivers <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="at">driver_id =</span> <span class="fu">paste0</span>(<span class="st">&quot;D&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="at">household_id =</span> <span class="fu">c</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="st">&quot;H1&quot;</span>, <span class="st">&quot;H1&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H2&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="st">&quot;H3&quot;</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="st">&quot;H4&quot;</span>, <span class="st">&quot;H4&quot;</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="st">&quot;H5&quot;</span>, <span class="st">&quot;H5&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  ),</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="at">marital_status =</span> <span class="fu">c</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="st">&quot;single&quot;</span>, <span class="st">&quot;single&quot;</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="st">&quot;married&quot;</span>, <span class="st">&quot;married&quot;</span>, <span class="st">&quot;single&quot;</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    <span class="st">&quot;married&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>    <span class="st">&quot;single&quot;</span>, <span class="st">&quot;single&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    <span class="st">&quot;married&quot;</span>, <span class="st">&quot;married&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  ),</span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="at">driver_age =</span> <span class="fu">c</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>    <span class="st">&quot;18_24&quot;</span>, <span class="st">&quot;40_64&quot;</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>    <span class="st">&quot;40_64&quot;</span>, <span class="st">&quot;65_plus&quot;</span>, <span class="st">&quot;25_39&quot;</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>    <span class="st">&quot;25_39&quot;</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>    <span class="st">&quot;18_24&quot;</span>, <span class="st">&quot;25_39&quot;</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>    <span class="st">&quot;40_64&quot;</span>, <span class="st">&quot;65_plus&quot;</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  ),</span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>  <span class="at">prior_chargeable_claims =</span> <span class="fu">c</span>(</span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a>    <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span>,</span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a>    <span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;0&quot;</span>,</span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a>    <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a>    <span class="st">&quot;2_plus&quot;</span>, <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a>    <span class="st">&quot;0&quot;</span>, <span class="st">&quot;0&quot;</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a>  ),</span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a>)</span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a>drivers</span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="co">#&gt;    driver_id household_id gender marital_status driver_age</span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="co">#&gt; 1         D1           H1      M         single      18_24</span></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co">#&gt; 2         D2           H1      F         single      40_64</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="co">#&gt; 3         D3           H2      F        married      40_64</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="co">#&gt; 4         D4           H2      M        married    65_plus</span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="co">#&gt; 5         D5           H2      M         single      25_39</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="co">#&gt; 6         D6           H3      F        married      25_39</span></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="co">#&gt; 7         D7           H4      M         single      18_24</span></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="co">#&gt; 8         D8           H4      F         single      25_39</span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="co">#&gt; 9         D9           H5      M        married      40_64</span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="co">#&gt; 10       D10           H5      F        married    65_plus</span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="co">#&gt;    prior_chargeable_claims</span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="co">#&gt; 1                        0</span></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="co">#&gt; 2                        0</span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="co">#&gt; 3                        0</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="co">#&gt; 4                        1</span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="co">#&gt; 5                        0</span></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="co">#&gt; 6                        1</span></span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a><span class="co">#&gt; 7                   2_plus</span></span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a><span class="co">#&gt; 8                        1</span></span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="co">#&gt; 9                        0</span></span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a><span class="co">#&gt; 10                       0</span></span></code></pre></div>
+</div>
+<div id="rate-the-drivers" class="section level3">
+<h3>Rate the drivers</h3>
+<p><code>rate_entities()</code> applies a rating plan to entity-level
+records and retains the same trace information available for policy- or
+vehicle-level rating.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>driver_result <span class="ot">&lt;-</span> <span class="fu">rate_entities</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">entity_data =</span> drivers,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">plan =</span> driver_plan</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>scored_drivers <span class="ot">&lt;-</span> driver_result<span class="sc">$</span>rated_data</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>scored_drivers[</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  ,</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>    <span class="st">&quot;driver_id&quot;</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="st">&quot;household_id&quot;</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>    <span class="st">&quot;gender&quot;</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>    <span class="st">&quot;marital_status&quot;</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>    <span class="st">&quot;driver_age&quot;</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>    <span class="st">&quot;prior_chargeable_claims&quot;</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>    <span class="st">&quot;indicated_BI&quot;</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>    <span class="st">&quot;indicated_CL&quot;</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  )</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>]</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;    driver_id household_id gender marital_status driver_age</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt; 1         D1           H1      M         single      18_24</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt; 2         D2           H1      F         single      40_64</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt; 3         D3           H2      F        married      40_64</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; 4         D4           H2      M        married    65_plus</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; 5         D5           H2      M         single      25_39</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt; 6         D6           H3      F        married      25_39</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt; 7         D7           H4      M         single      18_24</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt; 8         D8           H4      F         single      25_39</span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt; 9         D9           H5      M        married      40_64</span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&gt; 10       D10           H5      F        married    65_plus</span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt;    prior_chargeable_claims indicated_BI indicated_CL</span></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt; 1                        0    1.5369480    1.3628160</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt; 2                        0    1.0054800    0.9979200</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; 3                        0    0.8937600    0.9218880</span></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; 4                        1    1.2521568    1.1863488</span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; 5                        0    1.1856456    1.1112192</span></span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt; 6                        1    1.1684736    1.1400682</span></span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; 7                   2_plus    2.1840840    1.8454800</span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; 8                        1    1.3145328    1.2340944</span></span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; 9                        0    0.9758400    0.9684480</span></span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt; 10                       0    0.9473856    0.9679824</span></span></code></pre></div>
+<p>Because the driver plan begins with multiplicative factors rather
+than a dollar base rate, the <code>indicated_BI</code> and
+<code>indicated_CL</code> values are rating relativities. Each is the
+product of the four applicable driver factors.</p>
+</div>
+<div id="average-driver-factors-by-household" class="section level3">
+<h3>Average driver factors by household</h3>
+<p>The driver factors are averaged by household separately for BI and
+CL.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>driver_avgs <span class="ot">&lt;-</span> <span class="fu">aggregate_entity_values</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="at">rated_entity_data =</span> scored_drivers,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="at">group_col =</span> <span class="st">&quot;household_id&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="at">value_cols =</span> <span class="fu">c</span>(<span class="st">&quot;indicated_BI&quot;</span>, <span class="st">&quot;indicated_CL&quot;</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="at">aggregation =</span> <span class="st">&quot;mean&quot;</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="at">output_names =</span> <span class="fu">c</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_BI&quot;</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_CL&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  )</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>driver_avgs</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   household_id avg_driver_factor_BI avg_driver_factor_CL</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt; 1           H1            1.2712140            1.1803680</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt; 2           H2            1.1105208            1.0731520</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt; 3           H3            1.1684736            1.1400682</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt; 4           H4            1.7493084            1.5397872</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt; 5           H5            0.9616128            0.9682152</span></span></code></pre></div>
+<p>This produces one BI and one CL driver factor for each household.
+Those household-level values can now be treated like any other vehicle
+rating input.</p>
+</div>
+</div>
+<div id="vehicle-level-rating" class="section level2">
+<h2>Vehicle-level rating</h2>
+<div id="vehicle-factor-table" class="section level3">
+<h3>Vehicle factor table</h3>
+<p>The vehicle factor table contains constants, categorical factors, an
+interpolation curve, coefficients for the continuous calculations, and
+the final additive expense fee.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>vehicle_factor_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="co"># Base rate: one value per coverage</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;base_rate&quot;</span>, <span class="st">&quot;BI&quot;</span>, <span class="dv">220</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;base_rate&quot;</span>, <span class="st">&quot;CL&quot;</span>, <span class="dv">180</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="co"># Territory</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="st">&quot;territory&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.90</span>, <span class="fl">1.00</span>, <span class="fl">1.10</span>, <span class="fl">1.20</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>    <span class="st">&quot;territory&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;T1&quot;</span>, <span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  ),</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>    <span class="st">&quot;territory&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">1.00</span>, <span class="fl">1.08</span>, <span class="fl">1.15</span>),</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>    <span class="st">&quot;territory&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;T1&quot;</span>, <span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  ),</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  <span class="co"># Credit</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    <span class="st">&quot;credit&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.90</span>, <span class="fl">1.00</span>, <span class="fl">1.10</span>, <span class="fl">1.20</span>),</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>    <span class="st">&quot;credit&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  ),</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>    <span class="st">&quot;credit&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">1.00</span>, <span class="fl">1.08</span>, <span class="fl">1.15</span>),</span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>    <span class="st">&quot;credit&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  ),</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>  <span class="co"># Underwriting level</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>    <span class="st">&quot;underwriting_level&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.92</span>, <span class="fl">1.00</span>, <span class="fl">1.20</span>),</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>    <span class="st">&quot;underwriting_level&quot;</span>,</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;preferred&quot;</span>, <span class="st">&quot;standard&quot;</span>, <span class="st">&quot;nonstandard&quot;</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>  ),</span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>    <span class="st">&quot;underwriting_level&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">1.00</span>, <span class="fl">1.15</span>),</span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>    <span class="st">&quot;underwriting_level&quot;</span>,</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;preferred&quot;</span>, <span class="st">&quot;standard&quot;</span>, <span class="st">&quot;nonstandard&quot;</span>)</span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>  ),</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>  <span class="co"># Vehicle-value interpolation curve</span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>    <span class="st">&quot;vehicle_value_factor&quot;</span>, <span class="st">&quot;BI&quot;</span>,</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.95</span>, <span class="fl">1.00</span>, <span class="fl">1.05</span>, <span class="fl">1.10</span>, <span class="fl">1.15</span>),</span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>    <span class="st">&quot;vehicle_value&quot;</span>,</span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;10000&quot;</span>, <span class="st">&quot;20000&quot;</span>, <span class="st">&quot;30000&quot;</span>, <span class="st">&quot;40000&quot;</span>, <span class="st">&quot;50000&quot;</span>)</span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>  ),</span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>    <span class="st">&quot;vehicle_value_factor&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.90</span>, <span class="fl">0.98</span>, <span class="fl">1.08</span>, <span class="fl">1.18</span>, <span class="fl">1.28</span>),</span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>    <span class="st">&quot;vehicle_value&quot;</span>,</span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;10000&quot;</span>, <span class="st">&quot;20000&quot;</span>, <span class="st">&quot;30000&quot;</span>, <span class="st">&quot;40000&quot;</span>, <span class="st">&quot;50000&quot;</span>)</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>  ),</span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a>  <span class="co"># Continuous additive coefficient:</span></span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a>  <span class="co"># coefficient * geo_score is added to the running premium</span></span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;geo_score_charge&quot;</span>, <span class="st">&quot;BI&quot;</span>, <span class="fl">1.25</span>),</span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;geo_score_charge&quot;</span>, <span class="st">&quot;CL&quot;</span>, <span class="fl">0.75</span>),</span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a></span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a>  <span class="co"># Continuous multiplicative coefficient:</span></span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a>  <span class="co"># factor applied is 1 + coefficient * annual_mileage_000</span></span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;mileage_adjustment&quot;</span>, <span class="st">&quot;BI&quot;</span>, <span class="fl">0.004</span>),</span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;mileage_adjustment&quot;</span>, <span class="st">&quot;CL&quot;</span>, <span class="fl">0.003</span>),</span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a></span>
+<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a>  <span class="co"># Additive expense fee</span></span>
+<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;expense_fee&quot;</span>, <span class="st">&quot;BI&quot;</span>, <span class="dv">18</span>),</span>
+<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(<span class="st">&quot;expense_fee&quot;</span>, <span class="st">&quot;CL&quot;</span>, <span class="dv">12</span>),</span>
+<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a>  <span class="co"># Collision deductible / coverage option.</span></span>
+<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a>  <span class="co"># &quot;no coverage&quot; is intentionally listed first. Under the current package</span></span>
+<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a>  <span class="co"># design this term is placed last in the CL calculation so that a factor of</span></span>
+<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a>  <span class="co"># zero leaves the completed CL premium at zero.</span></span>
+<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a>  <span class="fu">make_factor_rows</span>(</span>
+<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a>    <span class="st">&quot;cl_deductible&quot;</span>, <span class="st">&quot;CL&quot;</span>,</span>
+<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.00</span>, <span class="fl">1.00</span>, <span class="fl">0.88</span>),</span>
+<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a>    <span class="st">&quot;cl_deductible&quot;</span>,</span>
+<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;no coverage&quot;</span>, <span class="st">&quot;1000&quot;</span>, <span class="st">&quot;2000&quot;</span>)</span>
+<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a>  )</span>
+<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a>)</span>
+<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a></span>
+<span id="cb8-84"><a href="#cb8-84" tabindex="-1"></a>vehicle_factor_table</span>
+<span id="cb8-85"><a href="#cb8-85" tabindex="-1"></a><span class="co">#&gt;    coverage            term_name term_value          variable1      level1</span></span>
+<span id="cb8-86"><a href="#cb8-86" tabindex="-1"></a><span class="co">#&gt; 1        BI            base_rate    220.000               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-87"><a href="#cb8-87" tabindex="-1"></a><span class="co">#&gt; 2        CL            base_rate    180.000               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-88"><a href="#cb8-88" tabindex="-1"></a><span class="co">#&gt; 3        BI            territory      0.900          territory          T1</span></span>
+<span id="cb8-89"><a href="#cb8-89" tabindex="-1"></a><span class="co">#&gt; 4        BI            territory      1.000          territory          T2</span></span>
+<span id="cb8-90"><a href="#cb8-90" tabindex="-1"></a><span class="co">#&gt; 5        BI            territory      1.100          territory          T3</span></span>
+<span id="cb8-91"><a href="#cb8-91" tabindex="-1"></a><span class="co">#&gt; 6        BI            territory      1.200          territory          T4</span></span>
+<span id="cb8-92"><a href="#cb8-92" tabindex="-1"></a><span class="co">#&gt; 7        CL            territory      0.950          territory          T1</span></span>
+<span id="cb8-93"><a href="#cb8-93" tabindex="-1"></a><span class="co">#&gt; 8        CL            territory      1.000          territory          T2</span></span>
+<span id="cb8-94"><a href="#cb8-94" tabindex="-1"></a><span class="co">#&gt; 9        CL            territory      1.080          territory          T3</span></span>
+<span id="cb8-95"><a href="#cb8-95" tabindex="-1"></a><span class="co">#&gt; 10       CL            territory      1.150          territory          T4</span></span>
+<span id="cb8-96"><a href="#cb8-96" tabindex="-1"></a><span class="co">#&gt; 11       BI               credit      0.900             credit           A</span></span>
+<span id="cb8-97"><a href="#cb8-97" tabindex="-1"></a><span class="co">#&gt; 12       BI               credit      1.000             credit           B</span></span>
+<span id="cb8-98"><a href="#cb8-98" tabindex="-1"></a><span class="co">#&gt; 13       BI               credit      1.100             credit           C</span></span>
+<span id="cb8-99"><a href="#cb8-99" tabindex="-1"></a><span class="co">#&gt; 14       BI               credit      1.200             credit           D</span></span>
+<span id="cb8-100"><a href="#cb8-100" tabindex="-1"></a><span class="co">#&gt; 15       CL               credit      0.920             credit           A</span></span>
+<span id="cb8-101"><a href="#cb8-101" tabindex="-1"></a><span class="co">#&gt; 16       CL               credit      1.000             credit           B</span></span>
+<span id="cb8-102"><a href="#cb8-102" tabindex="-1"></a><span class="co">#&gt; 17       CL               credit      1.080             credit           C</span></span>
+<span id="cb8-103"><a href="#cb8-103" tabindex="-1"></a><span class="co">#&gt; 18       CL               credit      1.150             credit           D</span></span>
+<span id="cb8-104"><a href="#cb8-104" tabindex="-1"></a><span class="co">#&gt; 19       BI   underwriting_level      0.920 underwriting_level   preferred</span></span>
+<span id="cb8-105"><a href="#cb8-105" tabindex="-1"></a><span class="co">#&gt; 20       BI   underwriting_level      1.000 underwriting_level    standard</span></span>
+<span id="cb8-106"><a href="#cb8-106" tabindex="-1"></a><span class="co">#&gt; 21       BI   underwriting_level      1.200 underwriting_level nonstandard</span></span>
+<span id="cb8-107"><a href="#cb8-107" tabindex="-1"></a><span class="co">#&gt; 22       CL   underwriting_level      0.950 underwriting_level   preferred</span></span>
+<span id="cb8-108"><a href="#cb8-108" tabindex="-1"></a><span class="co">#&gt; 23       CL   underwriting_level      1.000 underwriting_level    standard</span></span>
+<span id="cb8-109"><a href="#cb8-109" tabindex="-1"></a><span class="co">#&gt; 24       CL   underwriting_level      1.150 underwriting_level nonstandard</span></span>
+<span id="cb8-110"><a href="#cb8-110" tabindex="-1"></a><span class="co">#&gt; 25       BI vehicle_value_factor      0.950      vehicle_value       10000</span></span>
+<span id="cb8-111"><a href="#cb8-111" tabindex="-1"></a><span class="co">#&gt; 26       BI vehicle_value_factor      1.000      vehicle_value       20000</span></span>
+<span id="cb8-112"><a href="#cb8-112" tabindex="-1"></a><span class="co">#&gt; 27       BI vehicle_value_factor      1.050      vehicle_value       30000</span></span>
+<span id="cb8-113"><a href="#cb8-113" tabindex="-1"></a><span class="co">#&gt; 28       BI vehicle_value_factor      1.100      vehicle_value       40000</span></span>
+<span id="cb8-114"><a href="#cb8-114" tabindex="-1"></a><span class="co">#&gt; 29       BI vehicle_value_factor      1.150      vehicle_value       50000</span></span>
+<span id="cb8-115"><a href="#cb8-115" tabindex="-1"></a><span class="co">#&gt; 30       CL vehicle_value_factor      0.900      vehicle_value       10000</span></span>
+<span id="cb8-116"><a href="#cb8-116" tabindex="-1"></a><span class="co">#&gt; 31       CL vehicle_value_factor      0.980      vehicle_value       20000</span></span>
+<span id="cb8-117"><a href="#cb8-117" tabindex="-1"></a><span class="co">#&gt; 32       CL vehicle_value_factor      1.080      vehicle_value       30000</span></span>
+<span id="cb8-118"><a href="#cb8-118" tabindex="-1"></a><span class="co">#&gt; 33       CL vehicle_value_factor      1.180      vehicle_value       40000</span></span>
+<span id="cb8-119"><a href="#cb8-119" tabindex="-1"></a><span class="co">#&gt; 34       CL vehicle_value_factor      1.280      vehicle_value       50000</span></span>
+<span id="cb8-120"><a href="#cb8-120" tabindex="-1"></a><span class="co">#&gt; 35       BI     geo_score_charge      1.250               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-121"><a href="#cb8-121" tabindex="-1"></a><span class="co">#&gt; 36       CL     geo_score_charge      0.750               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-122"><a href="#cb8-122" tabindex="-1"></a><span class="co">#&gt; 37       BI   mileage_adjustment      0.004               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-123"><a href="#cb8-123" tabindex="-1"></a><span class="co">#&gt; 38       CL   mileage_adjustment      0.003               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-124"><a href="#cb8-124" tabindex="-1"></a><span class="co">#&gt; 39       BI          expense_fee     18.000               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-125"><a href="#cb8-125" tabindex="-1"></a><span class="co">#&gt; 40       CL          expense_fee     12.000               &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span id="cb8-126"><a href="#cb8-126" tabindex="-1"></a><span class="co">#&gt; 41       CL        cl_deductible      0.000      cl_deductible no coverage</span></span>
+<span id="cb8-127"><a href="#cb8-127" tabindex="-1"></a><span class="co">#&gt; 42       CL        cl_deductible      1.000      cl_deductible        1000</span></span>
+<span id="cb8-128"><a href="#cb8-128" tabindex="-1"></a><span class="co">#&gt; 43       CL        cl_deductible      0.880      cl_deductible        2000</span></span></code></pre></div>
+</div>
+<div id="vehicle-data" class="section level3">
+<h3>Vehicle data</h3>
+<p>There are eight vehicle records. Each vehicle belongs to one of the
+households rated above.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>vehicles <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">vehicle_id =</span> <span class="fu">paste0</span>(<span class="st">&quot;V&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">policy_id =</span> <span class="fu">c</span>(<span class="st">&quot;P1&quot;</span>, <span class="st">&quot;P1&quot;</span>, <span class="st">&quot;P2&quot;</span>, <span class="st">&quot;P2&quot;</span>, <span class="st">&quot;P3&quot;</span>, <span class="st">&quot;P4&quot;</span>, <span class="st">&quot;P5&quot;</span>, <span class="st">&quot;P5&quot;</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">household_id =</span> <span class="fu">c</span>(<span class="st">&quot;H1&quot;</span>, <span class="st">&quot;H1&quot;</span>, <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H3&quot;</span>, <span class="st">&quot;H4&quot;</span>, <span class="st">&quot;H5&quot;</span>, <span class="st">&quot;H5&quot;</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">territory =</span> <span class="fu">c</span>(<span class="st">&quot;T1&quot;</span>, <span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>, <span class="st">&quot;T2&quot;</span>, <span class="st">&quot;T4&quot;</span>, <span class="st">&quot;T3&quot;</span>, <span class="st">&quot;T4&quot;</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="at">credit =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;C&quot;</span>),</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">underwriting_level =</span> <span class="fu">c</span>(</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>    <span class="st">&quot;preferred&quot;</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>    <span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>    <span class="st">&quot;nonstandard&quot;</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>    <span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>    <span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>    <span class="st">&quot;nonstandard&quot;</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>    <span class="st">&quot;nonstandard&quot;</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>    <span class="st">&quot;preferred&quot;</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  ),</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  <span class="at">vehicle_value =</span> <span class="fu">c</span>(</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>    <span class="dv">12500</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>    <span class="dv">21750</span>,</span>
+<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>    <span class="dv">32000</span>,</span>
+<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>    <span class="dv">18000</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>    <span class="dv">27500</span>,</span>
+<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    <span class="dv">39000</span>,</span>
+<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="dv">46500</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>    <span class="dv">23500</span></span>
+<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a>  ),</span>
+<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>  <span class="at">geo_score =</span> <span class="fu">c</span>(<span class="fl">3.2</span>, <span class="fl">5.8</span>, <span class="fl">7.5</span>, <span class="fl">2.1</span>, <span class="fl">6.9</span>, <span class="fl">8.0</span>, <span class="fl">7.8</span>, <span class="fl">4.7</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a>  <span class="at">annual_mileage_000 =</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">10</span>, <span class="dv">14</span>, <span class="dv">18</span>, <span class="dv">20</span>, <span class="dv">7</span>),</span>
+<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>  <span class="at">cl_deductible =</span> <span class="fu">c</span>(</span>
+<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>    <span class="st">&quot;1000&quot;</span>,</span>
+<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>    <span class="st">&quot;no coverage&quot;</span>,</span>
+<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>    <span class="st">&quot;2000&quot;</span>,</span>
+<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>    <span class="st">&quot;1000&quot;</span>,</span>
+<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>    <span class="st">&quot;no coverage&quot;</span>,</span>
+<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>    <span class="st">&quot;1000&quot;</span>,</span>
+<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>    <span class="st">&quot;2000&quot;</span>,</span>
+<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>    <span class="st">&quot;no coverage&quot;</span></span>
+<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>  ),</span>
+<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>)</span>
+<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a>vehicles</span>
+<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a><span class="co">#&gt;   vehicle_id policy_id household_id territory credit underwriting_level</span></span>
+<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a><span class="co">#&gt; 1         V1        P1           H1        T1      A          preferred</span></span>
+<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a><span class="co">#&gt; 2         V2        P1           H1        T2      B           standard</span></span>
+<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a><span class="co">#&gt; 3         V3        P2           H2        T3      C        nonstandard</span></span>
+<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a><span class="co">#&gt; 4         V4        P2           H2        T4      D           standard</span></span>
+<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a><span class="co">#&gt; 5         V5        P3           H3        T2      B           standard</span></span>
+<span id="cb9-49"><a href="#cb9-49" tabindex="-1"></a><span class="co">#&gt; 6         V6        P4           H4        T4      C        nonstandard</span></span>
+<span id="cb9-50"><a href="#cb9-50" tabindex="-1"></a><span class="co">#&gt; 7         V7        P5           H5        T3      D        nonstandard</span></span>
+<span id="cb9-51"><a href="#cb9-51" tabindex="-1"></a><span class="co">#&gt; 8         V8        P5           H5        T4      C          preferred</span></span>
+<span id="cb9-52"><a href="#cb9-52" tabindex="-1"></a><span class="co">#&gt;   vehicle_value geo_score annual_mileage_000 cl_deductible</span></span>
+<span id="cb9-53"><a href="#cb9-53" tabindex="-1"></a><span class="co">#&gt; 1         12500       3.2                  8          1000</span></span>
+<span id="cb9-54"><a href="#cb9-54" tabindex="-1"></a><span class="co">#&gt; 2         21750       5.8                 12   no coverage</span></span>
+<span id="cb9-55"><a href="#cb9-55" tabindex="-1"></a><span class="co">#&gt; 3         32000       7.5                 16          2000</span></span>
+<span id="cb9-56"><a href="#cb9-56" tabindex="-1"></a><span class="co">#&gt; 4         18000       2.1                 10          1000</span></span>
+<span id="cb9-57"><a href="#cb9-57" tabindex="-1"></a><span class="co">#&gt; 5         27500       6.9                 14   no coverage</span></span>
+<span id="cb9-58"><a href="#cb9-58" tabindex="-1"></a><span class="co">#&gt; 6         39000       8.0                 18          1000</span></span>
+<span id="cb9-59"><a href="#cb9-59" tabindex="-1"></a><span class="co">#&gt; 7         46500       7.8                 20          2000</span></span>
+<span id="cb9-60"><a href="#cb9-60" tabindex="-1"></a><span class="co">#&gt; 8         23500       4.7                  7   no coverage</span></span></code></pre></div>
+<p>Join the household driver averages back to the vehicle data:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>vehicles_with_driver_avgs <span class="ot">&lt;-</span> <span class="fu">join_entity_values</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="at">parent_data =</span> vehicles,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">entity_values =</span> driver_avgs,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;household_id&quot;</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>vehicles_with_driver_avgs[</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  ,</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>    <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>    <span class="st">&quot;household_id&quot;</span>,</span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_BI&quot;</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_CL&quot;</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>  )</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>]</span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt;   vehicle_id household_id avg_driver_factor_BI avg_driver_factor_CL</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 1         V1           H1            1.2712140            1.1803680</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 2         V2           H1            1.2712140            1.1803680</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 3         V3           H2            1.1105208            1.0731520</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 4         V4           H2            1.1105208            1.0731520</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; 5         V5           H3            1.1684736            1.1400682</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 6         V6           H4            1.7493084            1.5397872</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 7         V7           H5            0.9616128            0.9682152</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; 8         V8           H5            0.9616128            0.9682152</span></span></code></pre></div>
+</div>
+</div>
+<div id="custom-rating-functions" class="section level2">
+<h2>Custom rating functions</h2>
+<p>Most rating elements are easier to inspect and maintain when they
+remain in the ordinary factor table and rating specification. Custom
+functions are therefore best treated as an escape hatch rather than the
+default way to express rating logic.</p>
+<p>They can still be useful when reproducing an existing rater that
+contains conditional or interdependent logic. A rater-modernization
+project may also be a good opportunity to reconsider whether unusual
+legacy rules should continue to exist at all.</p>
+<p>A custom function receives six arguments:</p>
+<ul>
+<li><code>row</code>: the one-row record being rated;</li>
+<li><code>coverage</code>: the coverage currently being rated;</li>
+<li><code>current_premium</code>: the running premium immediately before
+the step;</li>
+<li><code>plan</code>: the complete rating-plan object;</li>
+<li><code>spec_row</code>: the rating-specification row for the current
+step; and</li>
+<li><code>lookup</code>: a helper that can retrieve values from the
+plan’s factor table.</li>
+</ul>
+<div id="custom-function-1-high-score-surcharge" class="section level3">
+<h3>Custom function 1: high-score surcharge</h3>
+<p>The first custom function is intentionally simple. A high geographic
+score combined with nonstandard underwriting produces a 3 percent
+surcharge.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>custom_high_score_surcharge <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  row,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  coverage,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  current_premium,</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  plan,</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>  spec_row,</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>  lookup</span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a>) {</span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(row<span class="sc">$</span>geo_score[[<span class="dv">1</span>]])</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  uw <span class="ot">&lt;-</span> <span class="fu">as.character</span>(row<span class="sc">$</span>underwriting_level[[<span class="dv">1</span>]])</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>  <span class="cf">if</span> (score <span class="sc">&gt;=</span> <span class="dv">7</span> <span class="sc">&amp;&amp;</span> uw <span class="sc">==</span> <span class="st">&quot;nonstandard&quot;</span>) {</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a>    <span class="fl">1.03</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>    <span class="fl">1.00</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>  }</span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>}</span></code></pre></div>
+<p>This function only needs fields from <code>row</code>. The other
+arguments are still available because every custom function receives the
+same interface.</p>
+</div>
+<div id="custom-function-2-legacy-composite-risk-adjustment" class="section level3">
+<h3>Custom function 2: legacy composite-risk adjustment</h3>
+<p>The second custom function demonstrates a different use case. It
+looks up three ordinary rating factors that have already been used
+elsewhere in the rate calculation: territory, credit, and underwriting
+level.</p>
+<p>If exactly two of the three factors are adverse, a 3 percent
+surcharge applies. If all three are adverse, a 7 percent surcharge
+applies.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>legacy_composite_risk_adjustment <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  row,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  coverage,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  current_premium,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  plan,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  spec_row,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  lookup</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>) {</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  territory_factor <span class="ot">&lt;-</span> <span class="fu">lookup</span>(<span class="st">&quot;territory&quot;</span>)<span class="sc">$</span>value</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  credit_factor <span class="ot">&lt;-</span> <span class="fu">lookup</span>(<span class="st">&quot;credit&quot;</span>)<span class="sc">$</span>value</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  underwriting_factor <span class="ot">&lt;-</span> <span class="fu">lookup</span>(<span class="st">&quot;underwriting_level&quot;</span>)<span class="sc">$</span>value</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>  adverse_count <span class="ot">&lt;-</span> <span class="fu">sum</span>(</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>    <span class="fu">c</span>(</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>      territory_factor <span class="sc">&gt;</span> <span class="dv">1</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>      credit_factor <span class="sc">&gt;</span> <span class="dv">1</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>      underwriting_factor <span class="sc">&gt;</span> <span class="dv">1</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>    )</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>  )</span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>  <span class="cf">if</span> (adverse_count <span class="sc">==</span> <span class="dv">3</span>) {</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a>    <span class="fl">1.07</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (adverse_count <span class="sc">==</span> <span class="dv">2</span>) {</span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a>    <span class="fl">1.03</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a>    <span class="fl">1.00</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a>  }</span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a>}</span></code></pre></div>
+<p>This is the kind of rule that may be awkward to encode as another
+normalized factor table. The function can query the factor table
+directly and combine the results using arbitrary R logic.</p>
+<p>The flexibility is useful, but such logic should not automatically be
+viewed as good rating-plan design merely because it can be
+reproduced.</p>
+</div>
+</div>
+<div id="vehicle-rating-specification" class="section level2">
+<h2>Vehicle rating specification</h2>
+<p>The two custom functions are placed next to each other in the
+calculation order.</p>
+<p>For BI, the additive expense fee is the final step and the completed
+premium is rounded to the nearest dime. For CL, a
+deductible/coverage-option factor follows the expense fee and is the
+final step.</p>
+<p>Under the current package design, every coverage listed in the rating
+plan is rated for every record. The <code>&quot;no coverage&quot;</code> CL
+deductible level therefore has a factor of zero and is deliberately
+placed last. This produces a final CL premium of zero for vehicles that
+did not select the coverage.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>base_vehicle_terms <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="st">&quot;base_rate&quot;</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="st">&quot;territory&quot;</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>  <span class="st">&quot;average_driver_factor&quot;</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="st">&quot;credit&quot;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="st">&quot;underwriting_level&quot;</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="st">&quot;vehicle_value_factor&quot;</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="st">&quot;geo_score_charge&quot;</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="st">&quot;mileage_adjustment&quot;</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  <span class="st">&quot;custom_high_score_surcharge&quot;</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>  <span class="st">&quot;legacy_composite_risk_adjustment&quot;</span>,</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>  <span class="st">&quot;expense_fee&quot;</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a>)</span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a>base_vehicle_value_sources <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" tabindex="-1"></a>  <span class="st">&quot;input_value&quot;</span>,</span>
+<span id="cb13-19"><a href="#cb13-19" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-20"><a href="#cb13-20" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-21"><a href="#cb13-21" tabindex="-1"></a>  <span class="st">&quot;interpolated_lookup&quot;</span>,</span>
+<span id="cb13-22"><a href="#cb13-22" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-23"><a href="#cb13-23" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span>,</span>
+<span id="cb13-24"><a href="#cb13-24" tabindex="-1"></a>  <span class="st">&quot;custom_function&quot;</span>,</span>
+<span id="cb13-25"><a href="#cb13-25" tabindex="-1"></a>  <span class="st">&quot;custom_function&quot;</span>,</span>
+<span id="cb13-26"><a href="#cb13-26" tabindex="-1"></a>  <span class="st">&quot;factor_lookup&quot;</span></span>
+<span id="cb13-27"><a href="#cb13-27" tabindex="-1"></a>)</span>
+<span id="cb13-28"><a href="#cb13-28" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" tabindex="-1"></a>base_vehicle_calculation_types <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-30"><a href="#cb13-30" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-31"><a href="#cb13-31" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-32"><a href="#cb13-32" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-33"><a href="#cb13-33" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-34"><a href="#cb13-34" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-35"><a href="#cb13-35" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-36"><a href="#cb13-36" tabindex="-1"></a>  <span class="st">&quot;continuous_additive&quot;</span>,</span>
+<span id="cb13-37"><a href="#cb13-37" tabindex="-1"></a>  <span class="st">&quot;continuous_multiplicative&quot;</span>,</span>
+<span id="cb13-38"><a href="#cb13-38" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-39"><a href="#cb13-39" tabindex="-1"></a>  <span class="st">&quot;multiplicative&quot;</span>,</span>
+<span id="cb13-40"><a href="#cb13-40" tabindex="-1"></a>  <span class="st">&quot;additive&quot;</span></span>
+<span id="cb13-41"><a href="#cb13-41" tabindex="-1"></a>)</span>
+<span id="cb13-42"><a href="#cb13-42" tabindex="-1"></a></span>
+<span id="cb13-43"><a href="#cb13-43" tabindex="-1"></a>make_vehicle_spec <span class="ot">&lt;-</span> <span class="cf">function</span>(coverage, driver_input) {</span>
+<span id="cb13-44"><a href="#cb13-44" tabindex="-1"></a>  terms <span class="ot">&lt;-</span> base_vehicle_terms</span>
+<span id="cb13-45"><a href="#cb13-45" tabindex="-1"></a>  value_sources <span class="ot">&lt;-</span> base_vehicle_value_sources</span>
+<span id="cb13-46"><a href="#cb13-46" tabindex="-1"></a>  calculation_types <span class="ot">&lt;-</span> base_vehicle_calculation_types</span>
+<span id="cb13-47"><a href="#cb13-47" tabindex="-1"></a></span>
+<span id="cb13-48"><a href="#cb13-48" tabindex="-1"></a>  input_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-49"><a href="#cb13-49" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-50"><a href="#cb13-50" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-51"><a href="#cb13-51" tabindex="-1"></a>    driver_input,</span>
+<span id="cb13-52"><a href="#cb13-52" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-53"><a href="#cb13-53" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-54"><a href="#cb13-54" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-55"><a href="#cb13-55" tabindex="-1"></a>    <span class="st">&quot;geo_score&quot;</span>,</span>
+<span id="cb13-56"><a href="#cb13-56" tabindex="-1"></a>    <span class="st">&quot;annual_mileage_000&quot;</span>,</span>
+<span id="cb13-57"><a href="#cb13-57" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-58"><a href="#cb13-58" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-59"><a href="#cb13-59" tabindex="-1"></a>    <span class="cn">NA</span></span>
+<span id="cb13-60"><a href="#cb13-60" tabindex="-1"></a>  )</span>
+<span id="cb13-61"><a href="#cb13-61" tabindex="-1"></a></span>
+<span id="cb13-62"><a href="#cb13-62" tabindex="-1"></a>  lookup_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-63"><a href="#cb13-63" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-64"><a href="#cb13-64" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-65"><a href="#cb13-65" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-66"><a href="#cb13-66" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-67"><a href="#cb13-67" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-68"><a href="#cb13-68" tabindex="-1"></a>    <span class="st">&quot;vehicle_value&quot;</span>,</span>
+<span id="cb13-69"><a href="#cb13-69" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-70"><a href="#cb13-70" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-71"><a href="#cb13-71" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-72"><a href="#cb13-72" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-73"><a href="#cb13-73" tabindex="-1"></a>    <span class="cn">NA</span></span>
+<span id="cb13-74"><a href="#cb13-74" tabindex="-1"></a>  )</span>
+<span id="cb13-75"><a href="#cb13-75" tabindex="-1"></a></span>
+<span id="cb13-76"><a href="#cb13-76" tabindex="-1"></a>  bounds <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-77"><a href="#cb13-77" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-78"><a href="#cb13-78" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-79"><a href="#cb13-79" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-80"><a href="#cb13-80" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-81"><a href="#cb13-81" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-82"><a href="#cb13-82" tabindex="-1"></a>    <span class="st">&quot;error&quot;</span>,</span>
+<span id="cb13-83"><a href="#cb13-83" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-84"><a href="#cb13-84" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-85"><a href="#cb13-85" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-86"><a href="#cb13-86" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-87"><a href="#cb13-87" tabindex="-1"></a>    <span class="cn">NA</span></span>
+<span id="cb13-88"><a href="#cb13-88" tabindex="-1"></a>  )</span>
+<span id="cb13-89"><a href="#cb13-89" tabindex="-1"></a></span>
+<span id="cb13-90"><a href="#cb13-90" tabindex="-1"></a>  custom_functions <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb13-91"><a href="#cb13-91" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-92"><a href="#cb13-92" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-93"><a href="#cb13-93" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-94"><a href="#cb13-94" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-95"><a href="#cb13-95" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-96"><a href="#cb13-96" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-97"><a href="#cb13-97" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-98"><a href="#cb13-98" tabindex="-1"></a>    <span class="cn">NA</span>,</span>
+<span id="cb13-99"><a href="#cb13-99" tabindex="-1"></a>    <span class="st">&quot;custom_high_score_surcharge&quot;</span>,</span>
+<span id="cb13-100"><a href="#cb13-100" tabindex="-1"></a>    <span class="st">&quot;legacy_composite_risk_adjustment&quot;</span>,</span>
+<span id="cb13-101"><a href="#cb13-101" tabindex="-1"></a>    <span class="cn">NA</span></span>
+<span id="cb13-102"><a href="#cb13-102" tabindex="-1"></a>  )</span>
+<span id="cb13-103"><a href="#cb13-103" tabindex="-1"></a></span>
+<span id="cb13-104"><a href="#cb13-104" tabindex="-1"></a>  <span class="cf">if</span> (coverage <span class="sc">==</span> <span class="st">&quot;CL&quot;</span>) {</span>
+<span id="cb13-105"><a href="#cb13-105" tabindex="-1"></a>    terms <span class="ot">&lt;-</span> <span class="fu">c</span>(terms, <span class="st">&quot;cl_deductible&quot;</span>)</span>
+<span id="cb13-106"><a href="#cb13-106" tabindex="-1"></a>    value_sources <span class="ot">&lt;-</span> <span class="fu">c</span>(value_sources, <span class="st">&quot;factor_lookup&quot;</span>)</span>
+<span id="cb13-107"><a href="#cb13-107" tabindex="-1"></a>    calculation_types <span class="ot">&lt;-</span> <span class="fu">c</span>(calculation_types, <span class="st">&quot;multiplicative&quot;</span>)</span>
+<span id="cb13-108"><a href="#cb13-108" tabindex="-1"></a>    input_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(input_vars, <span class="cn">NA</span>)</span>
+<span id="cb13-109"><a href="#cb13-109" tabindex="-1"></a>    lookup_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(lookup_vars, <span class="cn">NA</span>)</span>
+<span id="cb13-110"><a href="#cb13-110" tabindex="-1"></a>    bounds <span class="ot">&lt;-</span> <span class="fu">c</span>(bounds, <span class="cn">NA</span>)</span>
+<span id="cb13-111"><a href="#cb13-111" tabindex="-1"></a>    custom_functions <span class="ot">&lt;-</span> <span class="fu">c</span>(custom_functions, <span class="cn">NA</span>)</span>
+<span id="cb13-112"><a href="#cb13-112" tabindex="-1"></a>  }</span>
+<span id="cb13-113"><a href="#cb13-113" tabindex="-1"></a></span>
+<span id="cb13-114"><a href="#cb13-114" tabindex="-1"></a>  rounding_rules <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA_character_</span>, <span class="fu">length</span>(terms))</span>
+<span id="cb13-115"><a href="#cb13-115" tabindex="-1"></a>  rounding_rules[<span class="fu">length</span>(terms)] <span class="ot">&lt;-</span> <span class="st">&quot;nearest_dime&quot;</span></span>
+<span id="cb13-116"><a href="#cb13-116" tabindex="-1"></a></span>
+<span id="cb13-117"><a href="#cb13-117" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb13-118"><a href="#cb13-118" tabindex="-1"></a>    <span class="at">coverage =</span> coverage,</span>
+<span id="cb13-119"><a href="#cb13-119" tabindex="-1"></a>    <span class="at">step_number =</span> <span class="fu">seq_along</span>(terms),</span>
+<span id="cb13-120"><a href="#cb13-120" tabindex="-1"></a>    <span class="at">term_name =</span> terms,</span>
+<span id="cb13-121"><a href="#cb13-121" tabindex="-1"></a>    <span class="at">value_source =</span> value_sources,</span>
+<span id="cb13-122"><a href="#cb13-122" tabindex="-1"></a>    <span class="at">calculation_type =</span> calculation_types,</span>
+<span id="cb13-123"><a href="#cb13-123" tabindex="-1"></a>    <span class="at">input_var =</span> input_vars,</span>
+<span id="cb13-124"><a href="#cb13-124" tabindex="-1"></a>    <span class="at">lookup_var =</span> lookup_vars,</span>
+<span id="cb13-125"><a href="#cb13-125" tabindex="-1"></a>    <span class="at">bounds =</span> bounds,</span>
+<span id="cb13-126"><a href="#cb13-126" tabindex="-1"></a>    <span class="at">custom_function =</span> custom_functions,</span>
+<span id="cb13-127"><a href="#cb13-127" tabindex="-1"></a>    <span class="at">rounding_rule =</span> rounding_rules,</span>
+<span id="cb13-128"><a href="#cb13-128" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb13-129"><a href="#cb13-129" tabindex="-1"></a>  )</span>
+<span id="cb13-130"><a href="#cb13-130" tabindex="-1"></a>}</span>
+<span id="cb13-131"><a href="#cb13-131" tabindex="-1"></a></span>
+<span id="cb13-132"><a href="#cb13-132" tabindex="-1"></a>vehicle_spec <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb13-133"><a href="#cb13-133" tabindex="-1"></a>  <span class="fu">make_vehicle_spec</span>(<span class="st">&quot;BI&quot;</span>, <span class="st">&quot;avg_driver_factor_BI&quot;</span>),</span>
+<span id="cb13-134"><a href="#cb13-134" tabindex="-1"></a>  <span class="fu">make_vehicle_spec</span>(<span class="st">&quot;CL&quot;</span>, <span class="st">&quot;avg_driver_factor_CL&quot;</span>)</span>
+<span id="cb13-135"><a href="#cb13-135" tabindex="-1"></a>)</span>
+<span id="cb13-136"><a href="#cb13-136" tabindex="-1"></a></span>
+<span id="cb13-137"><a href="#cb13-137" tabindex="-1"></a>vehicle_spec[</span>
+<span id="cb13-138"><a href="#cb13-138" tabindex="-1"></a>  ,</span>
+<span id="cb13-139"><a href="#cb13-139" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb13-140"><a href="#cb13-140" tabindex="-1"></a>    <span class="st">&quot;coverage&quot;</span>,</span>
+<span id="cb13-141"><a href="#cb13-141" tabindex="-1"></a>    <span class="st">&quot;step_number&quot;</span>,</span>
+<span id="cb13-142"><a href="#cb13-142" tabindex="-1"></a>    <span class="st">&quot;term_name&quot;</span>,</span>
+<span id="cb13-143"><a href="#cb13-143" tabindex="-1"></a>    <span class="st">&quot;value_source&quot;</span>,</span>
+<span id="cb13-144"><a href="#cb13-144" tabindex="-1"></a>    <span class="st">&quot;calculation_type&quot;</span>,</span>
+<span id="cb13-145"><a href="#cb13-145" tabindex="-1"></a>    <span class="st">&quot;input_var&quot;</span>,</span>
+<span id="cb13-146"><a href="#cb13-146" tabindex="-1"></a>    <span class="st">&quot;lookup_var&quot;</span>,</span>
+<span id="cb13-147"><a href="#cb13-147" tabindex="-1"></a>    <span class="st">&quot;custom_function&quot;</span>,</span>
+<span id="cb13-148"><a href="#cb13-148" tabindex="-1"></a>    <span class="st">&quot;rounding_rule&quot;</span></span>
+<span id="cb13-149"><a href="#cb13-149" tabindex="-1"></a>  )</span>
+<span id="cb13-150"><a href="#cb13-150" tabindex="-1"></a>]</span>
+<span id="cb13-151"><a href="#cb13-151" tabindex="-1"></a><span class="co">#&gt;    coverage step_number                        term_name        value_source</span></span>
+<span id="cb13-152"><a href="#cb13-152" tabindex="-1"></a><span class="co">#&gt; 1        BI           1                        base_rate       factor_lookup</span></span>
+<span id="cb13-153"><a href="#cb13-153" tabindex="-1"></a><span class="co">#&gt; 2        BI           2                        territory       factor_lookup</span></span>
+<span id="cb13-154"><a href="#cb13-154" tabindex="-1"></a><span class="co">#&gt; 3        BI           3            average_driver_factor         input_value</span></span>
+<span id="cb13-155"><a href="#cb13-155" tabindex="-1"></a><span class="co">#&gt; 4        BI           4                           credit       factor_lookup</span></span>
+<span id="cb13-156"><a href="#cb13-156" tabindex="-1"></a><span class="co">#&gt; 5        BI           5               underwriting_level       factor_lookup</span></span>
+<span id="cb13-157"><a href="#cb13-157" tabindex="-1"></a><span class="co">#&gt; 6        BI           6             vehicle_value_factor interpolated_lookup</span></span>
+<span id="cb13-158"><a href="#cb13-158" tabindex="-1"></a><span class="co">#&gt; 7        BI           7                 geo_score_charge       factor_lookup</span></span>
+<span id="cb13-159"><a href="#cb13-159" tabindex="-1"></a><span class="co">#&gt; 8        BI           8               mileage_adjustment       factor_lookup</span></span>
+<span id="cb13-160"><a href="#cb13-160" tabindex="-1"></a><span class="co">#&gt; 9        BI           9      custom_high_score_surcharge     custom_function</span></span>
+<span id="cb13-161"><a href="#cb13-161" tabindex="-1"></a><span class="co">#&gt; 10       BI          10 legacy_composite_risk_adjustment     custom_function</span></span>
+<span id="cb13-162"><a href="#cb13-162" tabindex="-1"></a><span class="co">#&gt; 11       BI          11                      expense_fee       factor_lookup</span></span>
+<span id="cb13-163"><a href="#cb13-163" tabindex="-1"></a><span class="co">#&gt; 12       CL           1                        base_rate       factor_lookup</span></span>
+<span id="cb13-164"><a href="#cb13-164" tabindex="-1"></a><span class="co">#&gt; 13       CL           2                        territory       factor_lookup</span></span>
+<span id="cb13-165"><a href="#cb13-165" tabindex="-1"></a><span class="co">#&gt; 14       CL           3            average_driver_factor         input_value</span></span>
+<span id="cb13-166"><a href="#cb13-166" tabindex="-1"></a><span class="co">#&gt; 15       CL           4                           credit       factor_lookup</span></span>
+<span id="cb13-167"><a href="#cb13-167" tabindex="-1"></a><span class="co">#&gt; 16       CL           5               underwriting_level       factor_lookup</span></span>
+<span id="cb13-168"><a href="#cb13-168" tabindex="-1"></a><span class="co">#&gt; 17       CL           6             vehicle_value_factor interpolated_lookup</span></span>
+<span id="cb13-169"><a href="#cb13-169" tabindex="-1"></a><span class="co">#&gt; 18       CL           7                 geo_score_charge       factor_lookup</span></span>
+<span id="cb13-170"><a href="#cb13-170" tabindex="-1"></a><span class="co">#&gt; 19       CL           8               mileage_adjustment       factor_lookup</span></span>
+<span id="cb13-171"><a href="#cb13-171" tabindex="-1"></a><span class="co">#&gt; 20       CL           9      custom_high_score_surcharge     custom_function</span></span>
+<span id="cb13-172"><a href="#cb13-172" tabindex="-1"></a><span class="co">#&gt; 21       CL          10 legacy_composite_risk_adjustment     custom_function</span></span>
+<span id="cb13-173"><a href="#cb13-173" tabindex="-1"></a><span class="co">#&gt; 22       CL          11                      expense_fee       factor_lookup</span></span>
+<span id="cb13-174"><a href="#cb13-174" tabindex="-1"></a><span class="co">#&gt; 23       CL          12                    cl_deductible       factor_lookup</span></span>
+<span id="cb13-175"><a href="#cb13-175" tabindex="-1"></a><span class="co">#&gt;             calculation_type            input_var    lookup_var</span></span>
+<span id="cb13-176"><a href="#cb13-176" tabindex="-1"></a><span class="co">#&gt; 1             multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-177"><a href="#cb13-177" tabindex="-1"></a><span class="co">#&gt; 2             multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-178"><a href="#cb13-178" tabindex="-1"></a><span class="co">#&gt; 3             multiplicative avg_driver_factor_BI          &lt;NA&gt;</span></span>
+<span id="cb13-179"><a href="#cb13-179" tabindex="-1"></a><span class="co">#&gt; 4             multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-180"><a href="#cb13-180" tabindex="-1"></a><span class="co">#&gt; 5             multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-181"><a href="#cb13-181" tabindex="-1"></a><span class="co">#&gt; 6             multiplicative                 &lt;NA&gt; vehicle_value</span></span>
+<span id="cb13-182"><a href="#cb13-182" tabindex="-1"></a><span class="co">#&gt; 7        continuous_additive            geo_score          &lt;NA&gt;</span></span>
+<span id="cb13-183"><a href="#cb13-183" tabindex="-1"></a><span class="co">#&gt; 8  continuous_multiplicative   annual_mileage_000          &lt;NA&gt;</span></span>
+<span id="cb13-184"><a href="#cb13-184" tabindex="-1"></a><span class="co">#&gt; 9             multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-185"><a href="#cb13-185" tabindex="-1"></a><span class="co">#&gt; 10            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-186"><a href="#cb13-186" tabindex="-1"></a><span class="co">#&gt; 11                  additive                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-187"><a href="#cb13-187" tabindex="-1"></a><span class="co">#&gt; 12            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-188"><a href="#cb13-188" tabindex="-1"></a><span class="co">#&gt; 13            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-189"><a href="#cb13-189" tabindex="-1"></a><span class="co">#&gt; 14            multiplicative avg_driver_factor_CL          &lt;NA&gt;</span></span>
+<span id="cb13-190"><a href="#cb13-190" tabindex="-1"></a><span class="co">#&gt; 15            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-191"><a href="#cb13-191" tabindex="-1"></a><span class="co">#&gt; 16            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-192"><a href="#cb13-192" tabindex="-1"></a><span class="co">#&gt; 17            multiplicative                 &lt;NA&gt; vehicle_value</span></span>
+<span id="cb13-193"><a href="#cb13-193" tabindex="-1"></a><span class="co">#&gt; 18       continuous_additive            geo_score          &lt;NA&gt;</span></span>
+<span id="cb13-194"><a href="#cb13-194" tabindex="-1"></a><span class="co">#&gt; 19 continuous_multiplicative   annual_mileage_000          &lt;NA&gt;</span></span>
+<span id="cb13-195"><a href="#cb13-195" tabindex="-1"></a><span class="co">#&gt; 20            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-196"><a href="#cb13-196" tabindex="-1"></a><span class="co">#&gt; 21            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-197"><a href="#cb13-197" tabindex="-1"></a><span class="co">#&gt; 22                  additive                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-198"><a href="#cb13-198" tabindex="-1"></a><span class="co">#&gt; 23            multiplicative                 &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-199"><a href="#cb13-199" tabindex="-1"></a><span class="co">#&gt;                     custom_function rounding_rule</span></span>
+<span id="cb13-200"><a href="#cb13-200" tabindex="-1"></a><span class="co">#&gt; 1                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-201"><a href="#cb13-201" tabindex="-1"></a><span class="co">#&gt; 2                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-202"><a href="#cb13-202" tabindex="-1"></a><span class="co">#&gt; 3                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-203"><a href="#cb13-203" tabindex="-1"></a><span class="co">#&gt; 4                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-204"><a href="#cb13-204" tabindex="-1"></a><span class="co">#&gt; 5                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-205"><a href="#cb13-205" tabindex="-1"></a><span class="co">#&gt; 6                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-206"><a href="#cb13-206" tabindex="-1"></a><span class="co">#&gt; 7                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-207"><a href="#cb13-207" tabindex="-1"></a><span class="co">#&gt; 8                              &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-208"><a href="#cb13-208" tabindex="-1"></a><span class="co">#&gt; 9       custom_high_score_surcharge          &lt;NA&gt;</span></span>
+<span id="cb13-209"><a href="#cb13-209" tabindex="-1"></a><span class="co">#&gt; 10 legacy_composite_risk_adjustment          &lt;NA&gt;</span></span>
+<span id="cb13-210"><a href="#cb13-210" tabindex="-1"></a><span class="co">#&gt; 11                             &lt;NA&gt;  nearest_dime</span></span>
+<span id="cb13-211"><a href="#cb13-211" tabindex="-1"></a><span class="co">#&gt; 12                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-212"><a href="#cb13-212" tabindex="-1"></a><span class="co">#&gt; 13                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-213"><a href="#cb13-213" tabindex="-1"></a><span class="co">#&gt; 14                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-214"><a href="#cb13-214" tabindex="-1"></a><span class="co">#&gt; 15                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-215"><a href="#cb13-215" tabindex="-1"></a><span class="co">#&gt; 16                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-216"><a href="#cb13-216" tabindex="-1"></a><span class="co">#&gt; 17                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-217"><a href="#cb13-217" tabindex="-1"></a><span class="co">#&gt; 18                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-218"><a href="#cb13-218" tabindex="-1"></a><span class="co">#&gt; 19                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-219"><a href="#cb13-219" tabindex="-1"></a><span class="co">#&gt; 20      custom_high_score_surcharge          &lt;NA&gt;</span></span>
+<span id="cb13-220"><a href="#cb13-220" tabindex="-1"></a><span class="co">#&gt; 21 legacy_composite_risk_adjustment          &lt;NA&gt;</span></span>
+<span id="cb13-221"><a href="#cb13-221" tabindex="-1"></a><span class="co">#&gt; 22                             &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span id="cb13-222"><a href="#cb13-222" tabindex="-1"></a><span class="co">#&gt; 23                             &lt;NA&gt;  nearest_dime</span></span></code></pre></div>
+<p>Create the completed vehicle rating plan and register both custom
+functions by name.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>vehicle_plan <span class="ot">&lt;-</span> <span class="fu">new_rating_plan</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="at">factor_table =</span> vehicle_factor_table,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="at">rating_spec =</span> vehicle_spec,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="at">coverages =</span> coverages,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="at">max_vars =</span> <span class="dv">1</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="at">policy_id_col =</span> <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="at">custom_functions =</span> <span class="fu">list</span>(</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>    <span class="at">custom_high_score_surcharge =</span> custom_high_score_surcharge,</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>    <span class="at">legacy_composite_risk_adjustment =</span> legacy_composite_risk_adjustment</span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  )</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>)</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>vehicle_plan</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="co">#&gt; &lt;rating_plan&gt;</span></span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt;   coverages: BI, CL </span></span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="co">#&gt;   factor rows: 43 </span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a><span class="co">#&gt;   spec rows: 23</span></span></code></pre></div>
+</div>
+<div id="rate-the-vehicles" class="section level2">
+<h2>Rate the vehicles</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>vehicle_result <span class="ot">&lt;-</span> <span class="fu">rate_policies_with_trace</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">rating_data =</span> vehicles_with_driver_avgs,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">plan =</span> vehicle_plan</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>rated_vehicles <span class="ot">&lt;-</span> vehicle_result<span class="sc">$</span>rated_data</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>rated_vehicles[</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  ,</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>    <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>    <span class="st">&quot;policy_id&quot;</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>    <span class="st">&quot;household_id&quot;</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>    <span class="st">&quot;territory&quot;</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>    <span class="st">&quot;credit&quot;</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>    <span class="st">&quot;underwriting_level&quot;</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>    <span class="st">&quot;vehicle_value&quot;</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>    <span class="st">&quot;geo_score&quot;</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>    <span class="st">&quot;annual_mileage_000&quot;</span>,</span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>    <span class="st">&quot;cl_deductible&quot;</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_BI&quot;</span>,</span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>    <span class="st">&quot;avg_driver_factor_CL&quot;</span>,</span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>    <span class="st">&quot;indicated_BI&quot;</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>    <span class="st">&quot;indicated_CL&quot;</span></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>  )</span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>]</span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="co">#&gt;   vehicle_id policy_id household_id territory credit underwriting_level</span></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co">#&gt; 1         V1        P1           H1        T1      A          preferred</span></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">#&gt; 2         V2        P1           H1        T2      B           standard</span></span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">#&gt; 3         V3        P2           H2        T3      C        nonstandard</span></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">#&gt; 4         V4        P2           H2        T4      D           standard</span></span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a><span class="co">#&gt; 5         V5        P3           H3        T2      B           standard</span></span>
+<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a><span class="co">#&gt; 6         V6        P4           H4        T4      C        nonstandard</span></span>
+<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a><span class="co">#&gt; 7         V7        P5           H5        T3      D        nonstandard</span></span>
+<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a><span class="co">#&gt; 8         V8        P5           H5        T4      C          preferred</span></span>
+<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a><span class="co">#&gt;   vehicle_value geo_score annual_mileage_000 cl_deductible avg_driver_factor_BI</span></span>
+<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a><span class="co">#&gt; 1         12500       3.2                  8          1000            1.2712140</span></span>
+<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a><span class="co">#&gt; 2         21750       5.8                 12   no coverage            1.2712140</span></span>
+<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a><span class="co">#&gt; 3         32000       7.5                 16          2000            1.1105208</span></span>
+<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a><span class="co">#&gt; 4         18000       2.1                 10          1000            1.1105208</span></span>
+<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a><span class="co">#&gt; 5         27500       6.9                 14   no coverage            1.1684736</span></span>
+<span id="cb15-42"><a href="#cb15-42" tabindex="-1"></a><span class="co">#&gt; 6         39000       8.0                 18          1000            1.7493084</span></span>
+<span id="cb15-43"><a href="#cb15-43" tabindex="-1"></a><span class="co">#&gt; 7         46500       7.8                 20          2000            0.9616128</span></span>
+<span id="cb15-44"><a href="#cb15-44" tabindex="-1"></a><span class="co">#&gt; 8         23500       4.7                  7   no coverage            0.9616128</span></span>
+<span id="cb15-45"><a href="#cb15-45" tabindex="-1"></a><span class="co">#&gt;   avg_driver_factor_CL indicated_BI indicated_CL</span></span>
+<span id="cb15-46"><a href="#cb15-46" tabindex="-1"></a><span class="co">#&gt; 1            1.1803680        229.1        180.7</span></span>
+<span id="cb15-47"><a href="#cb15-47" tabindex="-1"></a><span class="co">#&gt; 2            1.1803680        321.3          0.0</span></span>
+<span id="cb15-48"><a href="#cb15-48" tabindex="-1"></a><span class="co">#&gt; 3            1.0731520        469.9        306.0</span></span>
+<span id="cb15-49"><a href="#cb15-49" tabindex="-1"></a><span class="co">#&gt; 4            1.0731520        393.9        274.9</span></span>
+<span id="cb15-50"><a href="#cb15-50" tabindex="-1"></a><span class="co">#&gt; 5            1.1400682        308.7          0.0</span></span>
+<span id="cb15-51"><a href="#cb15-51" tabindex="-1"></a><span class="co">#&gt; 6            1.5397872        818.4        557.0</span></span>
+<span id="cb15-52"><a href="#cb15-52" tabindex="-1"></a><span class="co">#&gt; 7            0.9682152        481.3        335.2</span></span>
+<span id="cb15-53"><a href="#cb15-53" tabindex="-1"></a><span class="co">#&gt; 8            0.9682152        301.0          0.0</span></span></code></pre></div>
+<p>The final indicated premiums include the complete sequence of
+multiplicative, additive, continuous, interpolated, and custom
+calculations. Rounding is attached only to the final step for each
+coverage, so intermediate calculations retain their full precision and
+the completed premium is rounded to the nearest dime.</p>
+<p>For vehicles with <code>cl_deductible == &quot;no coverage&quot;</code>, the
+final CL deductible factor is zero and <code>indicated_CL</code> is
+therefore zero.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>rated_vehicles[</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  rated_vehicles<span class="sc">$</span>cl_deductible <span class="sc">==</span> <span class="st">&quot;no coverage&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;vehicle_id&quot;</span>, <span class="st">&quot;cl_deductible&quot;</span>, <span class="st">&quot;indicated_BI&quot;</span>, <span class="st">&quot;indicated_CL&quot;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>]</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt;   vehicle_id cl_deductible indicated_BI indicated_CL</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; 2         V2   no coverage        321.3            0</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co">#&gt; 5         V5   no coverage        308.7            0</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="co">#&gt; 8         V8   no coverage        301.0            0</span></span></code></pre></div>
+<p>This is a workable representation with the current API, but it also
+illustrates a distinction between <em>coverage selection</em> and
+<em>coverage rating</em>. The engine still evaluates the earlier CL
+steps before the final zero factor is applied. A rating system with
+first-class coverage selection could instead skip the CL calculation
+entirely for these records.</p>
+</div>
+<div id="inspect-interpolation-and-custom-function-trace-rows" class="section level2">
+<h2>Inspect interpolation and custom-function trace rows</h2>
+<p>The trace retains one row per rating step. The following subset
+focuses on the interpolated vehicle-value factor and the two custom
+calculations.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>interesting_terms <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="st">&quot;vehicle_value_factor&quot;</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="st">&quot;custom_high_score_surcharge&quot;</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="st">&quot;legacy_composite_risk_adjustment&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>interesting_trace <span class="ot">&lt;-</span> vehicle_result<span class="sc">$</span>term_trace[</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  vehicle_result<span class="sc">$</span>term_trace<span class="sc">$</span>term_name <span class="sc">%in%</span> interesting_terms,</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>    <span class="st">&quot;record_id&quot;</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>    <span class="st">&quot;coverage&quot;</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>    <span class="st">&quot;step_number&quot;</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>    <span class="st">&quot;term_name&quot;</span>,</span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>    <span class="st">&quot;value_source&quot;</span>,</span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>    <span class="st">&quot;calculation_type&quot;</span>,</span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>    <span class="st">&quot;input_value&quot;</span>,</span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>    <span class="st">&quot;looked_up_value&quot;</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>    <span class="st">&quot;applied_value&quot;</span>,</span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>    <span class="st">&quot;lower_level&quot;</span>,</span>
+<span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a>    <span class="st">&quot;upper_level&quot;</span>,</span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a>    <span class="st">&quot;lower_value&quot;</span>,</span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>    <span class="st">&quot;upper_value&quot;</span>,</span>
+<span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>    <span class="st">&quot;interpolation_weight&quot;</span>,</span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a>    <span class="st">&quot;value_before_step&quot;</span>,</span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a>    <span class="st">&quot;value_after_step&quot;</span>,</span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a>    <span class="st">&quot;custom_function&quot;</span></span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a>  )</span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a>]</span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a></span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a>interesting_trace</span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a><span class="co">#&gt;     record_id coverage step_number                        term_name</span></span>
+<span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a><span class="co">#&gt; 6          V1       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a><span class="co">#&gt; 9          V1       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a><span class="co">#&gt; 10         V1       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a><span class="co">#&gt; 17         V1       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a><span class="co">#&gt; 20         V1       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a><span class="co">#&gt; 21         V1       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a><span class="co">#&gt; 29         V2       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a><span class="co">#&gt; 32         V2       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a><span class="co">#&gt; 33         V2       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a><span class="co">#&gt; 40         V2       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a><span class="co">#&gt; 43         V2       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a><span class="co">#&gt; 44         V2       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-44"><a href="#cb17-44" tabindex="-1"></a><span class="co">#&gt; 52         V3       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-45"><a href="#cb17-45" tabindex="-1"></a><span class="co">#&gt; 55         V3       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-46"><a href="#cb17-46" tabindex="-1"></a><span class="co">#&gt; 56         V3       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-47"><a href="#cb17-47" tabindex="-1"></a><span class="co">#&gt; 63         V3       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-48"><a href="#cb17-48" tabindex="-1"></a><span class="co">#&gt; 66         V3       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-49"><a href="#cb17-49" tabindex="-1"></a><span class="co">#&gt; 67         V3       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-50"><a href="#cb17-50" tabindex="-1"></a><span class="co">#&gt; 75         V4       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-51"><a href="#cb17-51" tabindex="-1"></a><span class="co">#&gt; 78         V4       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-52"><a href="#cb17-52" tabindex="-1"></a><span class="co">#&gt; 79         V4       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-53"><a href="#cb17-53" tabindex="-1"></a><span class="co">#&gt; 86         V4       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-54"><a href="#cb17-54" tabindex="-1"></a><span class="co">#&gt; 89         V4       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-55"><a href="#cb17-55" tabindex="-1"></a><span class="co">#&gt; 90         V4       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-56"><a href="#cb17-56" tabindex="-1"></a><span class="co">#&gt; 98         V5       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-57"><a href="#cb17-57" tabindex="-1"></a><span class="co">#&gt; 101        V5       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-58"><a href="#cb17-58" tabindex="-1"></a><span class="co">#&gt; 102        V5       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-59"><a href="#cb17-59" tabindex="-1"></a><span class="co">#&gt; 109        V5       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-60"><a href="#cb17-60" tabindex="-1"></a><span class="co">#&gt; 112        V5       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-61"><a href="#cb17-61" tabindex="-1"></a><span class="co">#&gt; 113        V5       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-62"><a href="#cb17-62" tabindex="-1"></a><span class="co">#&gt; 121        V6       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-63"><a href="#cb17-63" tabindex="-1"></a><span class="co">#&gt; 124        V6       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-64"><a href="#cb17-64" tabindex="-1"></a><span class="co">#&gt; 125        V6       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-65"><a href="#cb17-65" tabindex="-1"></a><span class="co">#&gt; 132        V6       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-66"><a href="#cb17-66" tabindex="-1"></a><span class="co">#&gt; 135        V6       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-67"><a href="#cb17-67" tabindex="-1"></a><span class="co">#&gt; 136        V6       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-68"><a href="#cb17-68" tabindex="-1"></a><span class="co">#&gt; 144        V7       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-69"><a href="#cb17-69" tabindex="-1"></a><span class="co">#&gt; 147        V7       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-70"><a href="#cb17-70" tabindex="-1"></a><span class="co">#&gt; 148        V7       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-71"><a href="#cb17-71" tabindex="-1"></a><span class="co">#&gt; 155        V7       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-72"><a href="#cb17-72" tabindex="-1"></a><span class="co">#&gt; 158        V7       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-73"><a href="#cb17-73" tabindex="-1"></a><span class="co">#&gt; 159        V7       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-74"><a href="#cb17-74" tabindex="-1"></a><span class="co">#&gt; 167        V8       BI           6             vehicle_value_factor</span></span>
+<span id="cb17-75"><a href="#cb17-75" tabindex="-1"></a><span class="co">#&gt; 170        V8       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb17-76"><a href="#cb17-76" tabindex="-1"></a><span class="co">#&gt; 171        V8       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-77"><a href="#cb17-77" tabindex="-1"></a><span class="co">#&gt; 178        V8       CL           6             vehicle_value_factor</span></span>
+<span id="cb17-78"><a href="#cb17-78" tabindex="-1"></a><span class="co">#&gt; 181        V8       CL           9      custom_high_score_surcharge</span></span>
+<span id="cb17-79"><a href="#cb17-79" tabindex="-1"></a><span class="co">#&gt; 182        V8       CL          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-80"><a href="#cb17-80" tabindex="-1"></a><span class="co">#&gt;            value_source calculation_type input_value looked_up_value</span></span>
+<span id="cb17-81"><a href="#cb17-81" tabindex="-1"></a><span class="co">#&gt; 6   interpolated_lookup   multiplicative       12500         0.96250</span></span>
+<span id="cb17-82"><a href="#cb17-82" tabindex="-1"></a><span class="co">#&gt; 9       custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-83"><a href="#cb17-83" tabindex="-1"></a><span class="co">#&gt; 10      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-84"><a href="#cb17-84" tabindex="-1"></a><span class="co">#&gt; 17  interpolated_lookup   multiplicative       12500         0.92000</span></span>
+<span id="cb17-85"><a href="#cb17-85" tabindex="-1"></a><span class="co">#&gt; 20      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-86"><a href="#cb17-86" tabindex="-1"></a><span class="co">#&gt; 21      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-87"><a href="#cb17-87" tabindex="-1"></a><span class="co">#&gt; 29  interpolated_lookup   multiplicative       21750         1.00875</span></span>
+<span id="cb17-88"><a href="#cb17-88" tabindex="-1"></a><span class="co">#&gt; 32      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-89"><a href="#cb17-89" tabindex="-1"></a><span class="co">#&gt; 33      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-90"><a href="#cb17-90" tabindex="-1"></a><span class="co">#&gt; 40  interpolated_lookup   multiplicative       21750         0.99750</span></span>
+<span id="cb17-91"><a href="#cb17-91" tabindex="-1"></a><span class="co">#&gt; 43      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-92"><a href="#cb17-92" tabindex="-1"></a><span class="co">#&gt; 44      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-93"><a href="#cb17-93" tabindex="-1"></a><span class="co">#&gt; 52  interpolated_lookup   multiplicative       32000         1.06000</span></span>
+<span id="cb17-94"><a href="#cb17-94" tabindex="-1"></a><span class="co">#&gt; 55      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-95"><a href="#cb17-95" tabindex="-1"></a><span class="co">#&gt; 56      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-96"><a href="#cb17-96" tabindex="-1"></a><span class="co">#&gt; 63  interpolated_lookup   multiplicative       32000         1.10000</span></span>
+<span id="cb17-97"><a href="#cb17-97" tabindex="-1"></a><span class="co">#&gt; 66      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-98"><a href="#cb17-98" tabindex="-1"></a><span class="co">#&gt; 67      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-99"><a href="#cb17-99" tabindex="-1"></a><span class="co">#&gt; 75  interpolated_lookup   multiplicative       18000         0.99000</span></span>
+<span id="cb17-100"><a href="#cb17-100" tabindex="-1"></a><span class="co">#&gt; 78      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-101"><a href="#cb17-101" tabindex="-1"></a><span class="co">#&gt; 79      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-102"><a href="#cb17-102" tabindex="-1"></a><span class="co">#&gt; 86  interpolated_lookup   multiplicative       18000         0.96400</span></span>
+<span id="cb17-103"><a href="#cb17-103" tabindex="-1"></a><span class="co">#&gt; 89      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-104"><a href="#cb17-104" tabindex="-1"></a><span class="co">#&gt; 90      custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-105"><a href="#cb17-105" tabindex="-1"></a><span class="co">#&gt; 98  interpolated_lookup   multiplicative       27500         1.03750</span></span>
+<span id="cb17-106"><a href="#cb17-106" tabindex="-1"></a><span class="co">#&gt; 101     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-107"><a href="#cb17-107" tabindex="-1"></a><span class="co">#&gt; 102     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-108"><a href="#cb17-108" tabindex="-1"></a><span class="co">#&gt; 109 interpolated_lookup   multiplicative       27500         1.05500</span></span>
+<span id="cb17-109"><a href="#cb17-109" tabindex="-1"></a><span class="co">#&gt; 112     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-110"><a href="#cb17-110" tabindex="-1"></a><span class="co">#&gt; 113     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-111"><a href="#cb17-111" tabindex="-1"></a><span class="co">#&gt; 121 interpolated_lookup   multiplicative       39000         1.09500</span></span>
+<span id="cb17-112"><a href="#cb17-112" tabindex="-1"></a><span class="co">#&gt; 124     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-113"><a href="#cb17-113" tabindex="-1"></a><span class="co">#&gt; 125     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-114"><a href="#cb17-114" tabindex="-1"></a><span class="co">#&gt; 132 interpolated_lookup   multiplicative       39000         1.17000</span></span>
+<span id="cb17-115"><a href="#cb17-115" tabindex="-1"></a><span class="co">#&gt; 135     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-116"><a href="#cb17-116" tabindex="-1"></a><span class="co">#&gt; 136     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-117"><a href="#cb17-117" tabindex="-1"></a><span class="co">#&gt; 144 interpolated_lookup   multiplicative       46500         1.13250</span></span>
+<span id="cb17-118"><a href="#cb17-118" tabindex="-1"></a><span class="co">#&gt; 147     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-119"><a href="#cb17-119" tabindex="-1"></a><span class="co">#&gt; 148     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-120"><a href="#cb17-120" tabindex="-1"></a><span class="co">#&gt; 155 interpolated_lookup   multiplicative       46500         1.24500</span></span>
+<span id="cb17-121"><a href="#cb17-121" tabindex="-1"></a><span class="co">#&gt; 158     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-122"><a href="#cb17-122" tabindex="-1"></a><span class="co">#&gt; 159     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-123"><a href="#cb17-123" tabindex="-1"></a><span class="co">#&gt; 167 interpolated_lookup   multiplicative       23500         1.01750</span></span>
+<span id="cb17-124"><a href="#cb17-124" tabindex="-1"></a><span class="co">#&gt; 170     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-125"><a href="#cb17-125" tabindex="-1"></a><span class="co">#&gt; 171     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-126"><a href="#cb17-126" tabindex="-1"></a><span class="co">#&gt; 178 interpolated_lookup   multiplicative       23500         1.01500</span></span>
+<span id="cb17-127"><a href="#cb17-127" tabindex="-1"></a><span class="co">#&gt; 181     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-128"><a href="#cb17-128" tabindex="-1"></a><span class="co">#&gt; 182     custom_function   multiplicative          NA              NA</span></span>
+<span id="cb17-129"><a href="#cb17-129" tabindex="-1"></a><span class="co">#&gt;     applied_value lower_level upper_level lower_value upper_value</span></span>
+<span id="cb17-130"><a href="#cb17-130" tabindex="-1"></a><span class="co">#&gt; 6         0.96250       10000       20000        0.95        1.00</span></span>
+<span id="cb17-131"><a href="#cb17-131" tabindex="-1"></a><span class="co">#&gt; 9         1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-132"><a href="#cb17-132" tabindex="-1"></a><span class="co">#&gt; 10        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-133"><a href="#cb17-133" tabindex="-1"></a><span class="co">#&gt; 17        0.92000       10000       20000        0.90        0.98</span></span>
+<span id="cb17-134"><a href="#cb17-134" tabindex="-1"></a><span class="co">#&gt; 20        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-135"><a href="#cb17-135" tabindex="-1"></a><span class="co">#&gt; 21        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-136"><a href="#cb17-136" tabindex="-1"></a><span class="co">#&gt; 29        1.00875       20000       30000        1.00        1.05</span></span>
+<span id="cb17-137"><a href="#cb17-137" tabindex="-1"></a><span class="co">#&gt; 32        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-138"><a href="#cb17-138" tabindex="-1"></a><span class="co">#&gt; 33        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-139"><a href="#cb17-139" tabindex="-1"></a><span class="co">#&gt; 40        0.99750       20000       30000        0.98        1.08</span></span>
+<span id="cb17-140"><a href="#cb17-140" tabindex="-1"></a><span class="co">#&gt; 43        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-141"><a href="#cb17-141" tabindex="-1"></a><span class="co">#&gt; 44        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-142"><a href="#cb17-142" tabindex="-1"></a><span class="co">#&gt; 52        1.06000       30000       40000        1.05        1.10</span></span>
+<span id="cb17-143"><a href="#cb17-143" tabindex="-1"></a><span class="co">#&gt; 55        1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-144"><a href="#cb17-144" tabindex="-1"></a><span class="co">#&gt; 56        1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-145"><a href="#cb17-145" tabindex="-1"></a><span class="co">#&gt; 63        1.10000       30000       40000        1.08        1.18</span></span>
+<span id="cb17-146"><a href="#cb17-146" tabindex="-1"></a><span class="co">#&gt; 66        1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-147"><a href="#cb17-147" tabindex="-1"></a><span class="co">#&gt; 67        1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-148"><a href="#cb17-148" tabindex="-1"></a><span class="co">#&gt; 75        0.99000       10000       20000        0.95        1.00</span></span>
+<span id="cb17-149"><a href="#cb17-149" tabindex="-1"></a><span class="co">#&gt; 78        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-150"><a href="#cb17-150" tabindex="-1"></a><span class="co">#&gt; 79        1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-151"><a href="#cb17-151" tabindex="-1"></a><span class="co">#&gt; 86        0.96400       10000       20000        0.90        0.98</span></span>
+<span id="cb17-152"><a href="#cb17-152" tabindex="-1"></a><span class="co">#&gt; 89        1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-153"><a href="#cb17-153" tabindex="-1"></a><span class="co">#&gt; 90        1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-154"><a href="#cb17-154" tabindex="-1"></a><span class="co">#&gt; 98        1.03750       20000       30000        1.00        1.05</span></span>
+<span id="cb17-155"><a href="#cb17-155" tabindex="-1"></a><span class="co">#&gt; 101       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-156"><a href="#cb17-156" tabindex="-1"></a><span class="co">#&gt; 102       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-157"><a href="#cb17-157" tabindex="-1"></a><span class="co">#&gt; 109       1.05500       20000       30000        0.98        1.08</span></span>
+<span id="cb17-158"><a href="#cb17-158" tabindex="-1"></a><span class="co">#&gt; 112       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-159"><a href="#cb17-159" tabindex="-1"></a><span class="co">#&gt; 113       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-160"><a href="#cb17-160" tabindex="-1"></a><span class="co">#&gt; 121       1.09500       30000       40000        1.05        1.10</span></span>
+<span id="cb17-161"><a href="#cb17-161" tabindex="-1"></a><span class="co">#&gt; 124       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-162"><a href="#cb17-162" tabindex="-1"></a><span class="co">#&gt; 125       1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-163"><a href="#cb17-163" tabindex="-1"></a><span class="co">#&gt; 132       1.17000       30000       40000        1.08        1.18</span></span>
+<span id="cb17-164"><a href="#cb17-164" tabindex="-1"></a><span class="co">#&gt; 135       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-165"><a href="#cb17-165" tabindex="-1"></a><span class="co">#&gt; 136       1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-166"><a href="#cb17-166" tabindex="-1"></a><span class="co">#&gt; 144       1.13250       40000       50000        1.10        1.15</span></span>
+<span id="cb17-167"><a href="#cb17-167" tabindex="-1"></a><span class="co">#&gt; 147       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-168"><a href="#cb17-168" tabindex="-1"></a><span class="co">#&gt; 148       1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-169"><a href="#cb17-169" tabindex="-1"></a><span class="co">#&gt; 155       1.24500       40000       50000        1.18        1.28</span></span>
+<span id="cb17-170"><a href="#cb17-170" tabindex="-1"></a><span class="co">#&gt; 158       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-171"><a href="#cb17-171" tabindex="-1"></a><span class="co">#&gt; 159       1.07000          NA          NA          NA          NA</span></span>
+<span id="cb17-172"><a href="#cb17-172" tabindex="-1"></a><span class="co">#&gt; 167       1.01750       20000       30000        1.00        1.05</span></span>
+<span id="cb17-173"><a href="#cb17-173" tabindex="-1"></a><span class="co">#&gt; 170       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-174"><a href="#cb17-174" tabindex="-1"></a><span class="co">#&gt; 171       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-175"><a href="#cb17-175" tabindex="-1"></a><span class="co">#&gt; 178       1.01500       20000       30000        0.98        1.08</span></span>
+<span id="cb17-176"><a href="#cb17-176" tabindex="-1"></a><span class="co">#&gt; 181       1.00000          NA          NA          NA          NA</span></span>
+<span id="cb17-177"><a href="#cb17-177" tabindex="-1"></a><span class="co">#&gt; 182       1.03000          NA          NA          NA          NA</span></span>
+<span id="cb17-178"><a href="#cb17-178" tabindex="-1"></a><span class="co">#&gt;     interpolation_weight value_before_step value_after_step</span></span>
+<span id="cb17-179"><a href="#cb17-179" tabindex="-1"></a><span class="co">#&gt; 6                  0.250          208.4079         200.5926</span></span>
+<span id="cb17-180"><a href="#cb17-180" tabindex="-1"></a><span class="co">#&gt; 9                     NA          211.1396         211.1396</span></span>
+<span id="cb17-181"><a href="#cb17-181" tabindex="-1"></a><span class="co">#&gt; 10                    NA          211.1396         211.1396</span></span>
+<span id="cb17-182"><a href="#cb17-182" tabindex="-1"></a><span class="co">#&gt; 17                 0.250          176.4107         162.2979</span></span>
+<span id="cb17-183"><a href="#cb17-183" tabindex="-1"></a><span class="co">#&gt; 20                    NA          168.6506         168.6506</span></span>
+<span id="cb17-184"><a href="#cb17-184" tabindex="-1"></a><span class="co">#&gt; 21                    NA          168.6506         168.6506</span></span>
+<span id="cb17-185"><a href="#cb17-185" tabindex="-1"></a><span class="co">#&gt; 29                 0.175          279.6671         282.1142</span></span>
+<span id="cb17-186"><a href="#cb17-186" tabindex="-1"></a><span class="co">#&gt; 32                    NA          303.2536         303.2536</span></span>
+<span id="cb17-187"><a href="#cb17-187" tabindex="-1"></a><span class="co">#&gt; 33                    NA          303.2536         303.2536</span></span>
+<span id="cb17-188"><a href="#cb17-188" tabindex="-1"></a><span class="co">#&gt; 40                 0.175          212.4662         211.9351</span></span>
+<span id="cb17-189"><a href="#cb17-189" tabindex="-1"></a><span class="co">#&gt; 43                    NA          224.0713         224.0713</span></span>
+<span id="cb17-190"><a href="#cb17-190" tabindex="-1"></a><span class="co">#&gt; 44                    NA          224.0713         224.0713</span></span>
+<span id="cb17-191"><a href="#cb17-191" tabindex="-1"></a><span class="co">#&gt; 52                 0.200          354.7448         376.0295</span></span>
+<span id="cb17-192"><a href="#cb17-192" tabindex="-1"></a><span class="co">#&gt; 55                    NA          410.0703         422.3724</span></span>
+<span id="cb17-193"><a href="#cb17-193" tabindex="-1"></a><span class="co">#&gt; 56                    NA          422.3724         451.9385</span></span>
+<span id="cb17-194"><a href="#cb17-194" tabindex="-1"></a><span class="co">#&gt; 63                 0.200          259.1070         285.0177</span></span>
+<span id="cb17-195"><a href="#cb17-195" tabindex="-1"></a><span class="co">#&gt; 66                    NA          304.5935         313.7313</span></span>
+<span id="cb17-196"><a href="#cb17-196" tabindex="-1"></a><span class="co">#&gt; 67                    NA          313.7313         335.6925</span></span>
+<span id="cb17-197"><a href="#cb17-197" tabindex="-1"></a><span class="co">#&gt; 75                 0.800          351.8130         348.2949</span></span>
+<span id="cb17-198"><a href="#cb17-198" tabindex="-1"></a><span class="co">#&gt; 78                    NA          364.9567         364.9567</span></span>
+<span id="cb17-199"><a href="#cb17-199" tabindex="-1"></a><span class="co">#&gt; 79                    NA          364.9567         375.9054</span></span>
+<span id="cb17-200"><a href="#cb17-200" tabindex="-1"></a><span class="co">#&gt; 86                 0.800          255.4638         246.2671</span></span>
+<span id="cb17-201"><a href="#cb17-201" tabindex="-1"></a><span class="co">#&gt; 89                    NA          255.2774         255.2774</span></span>
+<span id="cb17-202"><a href="#cb17-202" tabindex="-1"></a><span class="co">#&gt; 90                    NA          255.2774         262.9357</span></span>
+<span id="cb17-203"><a href="#cb17-203" tabindex="-1"></a><span class="co">#&gt; 98                 0.750          257.0642         266.7041</span></span>
+<span id="cb17-204"><a href="#cb17-204" tabindex="-1"></a><span class="co">#&gt; 101                   NA          290.7475         290.7475</span></span>
+<span id="cb17-205"><a href="#cb17-205" tabindex="-1"></a><span class="co">#&gt; 102                   NA          290.7475         290.7475</span></span>
+<span id="cb17-206"><a href="#cb17-206" tabindex="-1"></a><span class="co">#&gt; 109                0.750          205.2123         216.4989</span></span>
+<span id="cb17-207"><a href="#cb17-207" tabindex="-1"></a><span class="co">#&gt; 112                   NA          230.9842         230.9842</span></span>
+<span id="cb17-208"><a href="#cb17-208" tabindex="-1"></a><span class="co">#&gt; 113                   NA          230.9842         230.9842</span></span>
+<span id="cb17-209"><a href="#cb17-209" tabindex="-1"></a><span class="co">#&gt; 121                0.900          609.5990         667.5109</span></span>
+<span id="cb17-210"><a href="#cb17-210" tabindex="-1"></a><span class="co">#&gt; 124                   NA          726.2917         748.0804</span></span>
+<span id="cb17-211"><a href="#cb17-211" tabindex="-1"></a><span class="co">#&gt; 125                   NA          748.0804         800.4461</span></span>
+<span id="cb17-212"><a href="#cb17-212" tabindex="-1"></a><span class="co">#&gt; 132                0.900          395.8701         463.1680</span></span>
+<span id="cb17-213"><a href="#cb17-213" tabindex="-1"></a><span class="co">#&gt; 135                   NA          494.5030         509.3381</span></span>
+<span id="cb17-214"><a href="#cb17-214" tabindex="-1"></a><span class="co">#&gt; 136                   NA          509.3381         544.9918</span></span>
+<span id="cb17-215"><a href="#cb17-215" tabindex="-1"></a><span class="co">#&gt; 144                0.650          335.1028         379.5040</span></span>
+<span id="cb17-216"><a href="#cb17-216" tabindex="-1"></a><span class="co">#&gt; 147                   NA          420.3943         433.0061</span></span>
+<span id="cb17-217"><a href="#cb17-217" tabindex="-1"></a><span class="co">#&gt; 148                   NA          433.0061         463.3165</span></span>
+<span id="cb17-218"><a href="#cb17-218" tabindex="-1"></a><span class="co">#&gt; 155                0.650          248.9223         309.9083</span></span>
+<span id="cb17-219"><a href="#cb17-219" tabindex="-1"></a><span class="co">#&gt; 158                   NA          334.7038         344.7449</span></span>
+<span id="cb17-220"><a href="#cb17-220" tabindex="-1"></a><span class="co">#&gt; 159                   NA          344.7449         368.8770</span></span>
+<span id="cb17-221"><a href="#cb17-221" tabindex="-1"></a><span class="co">#&gt; 167                0.350          256.9122         261.4081</span></span>
+<span id="cb17-222"><a href="#cb17-222" tabindex="-1"></a><span class="co">#&gt; 170                   NA          274.7671         274.7671</span></span>
+<span id="cb17-223"><a href="#cb17-223" tabindex="-1"></a><span class="co">#&gt; 171                   NA          274.7671         283.0101</span></span>
+<span id="cb17-224"><a href="#cb17-224" tabindex="-1"></a><span class="co">#&gt; 178                0.350          205.6315         208.7160</span></span>
+<span id="cb17-225"><a href="#cb17-225" tabindex="-1"></a><span class="co">#&gt; 181                   NA          216.6980         216.6980</span></span>
+<span id="cb17-226"><a href="#cb17-226" tabindex="-1"></a><span class="co">#&gt; 182                   NA          216.6980         223.1990</span></span>
+<span id="cb17-227"><a href="#cb17-227" tabindex="-1"></a><span class="co">#&gt;                      custom_function</span></span>
+<span id="cb17-228"><a href="#cb17-228" tabindex="-1"></a><span class="co">#&gt; 6                               &lt;NA&gt;</span></span>
+<span id="cb17-229"><a href="#cb17-229" tabindex="-1"></a><span class="co">#&gt; 9        custom_high_score_surcharge</span></span>
+<span id="cb17-230"><a href="#cb17-230" tabindex="-1"></a><span class="co">#&gt; 10  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-231"><a href="#cb17-231" tabindex="-1"></a><span class="co">#&gt; 17                              &lt;NA&gt;</span></span>
+<span id="cb17-232"><a href="#cb17-232" tabindex="-1"></a><span class="co">#&gt; 20       custom_high_score_surcharge</span></span>
+<span id="cb17-233"><a href="#cb17-233" tabindex="-1"></a><span class="co">#&gt; 21  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-234"><a href="#cb17-234" tabindex="-1"></a><span class="co">#&gt; 29                              &lt;NA&gt;</span></span>
+<span id="cb17-235"><a href="#cb17-235" tabindex="-1"></a><span class="co">#&gt; 32       custom_high_score_surcharge</span></span>
+<span id="cb17-236"><a href="#cb17-236" tabindex="-1"></a><span class="co">#&gt; 33  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-237"><a href="#cb17-237" tabindex="-1"></a><span class="co">#&gt; 40                              &lt;NA&gt;</span></span>
+<span id="cb17-238"><a href="#cb17-238" tabindex="-1"></a><span class="co">#&gt; 43       custom_high_score_surcharge</span></span>
+<span id="cb17-239"><a href="#cb17-239" tabindex="-1"></a><span class="co">#&gt; 44  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-240"><a href="#cb17-240" tabindex="-1"></a><span class="co">#&gt; 52                              &lt;NA&gt;</span></span>
+<span id="cb17-241"><a href="#cb17-241" tabindex="-1"></a><span class="co">#&gt; 55       custom_high_score_surcharge</span></span>
+<span id="cb17-242"><a href="#cb17-242" tabindex="-1"></a><span class="co">#&gt; 56  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-243"><a href="#cb17-243" tabindex="-1"></a><span class="co">#&gt; 63                              &lt;NA&gt;</span></span>
+<span id="cb17-244"><a href="#cb17-244" tabindex="-1"></a><span class="co">#&gt; 66       custom_high_score_surcharge</span></span>
+<span id="cb17-245"><a href="#cb17-245" tabindex="-1"></a><span class="co">#&gt; 67  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-246"><a href="#cb17-246" tabindex="-1"></a><span class="co">#&gt; 75                              &lt;NA&gt;</span></span>
+<span id="cb17-247"><a href="#cb17-247" tabindex="-1"></a><span class="co">#&gt; 78       custom_high_score_surcharge</span></span>
+<span id="cb17-248"><a href="#cb17-248" tabindex="-1"></a><span class="co">#&gt; 79  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-249"><a href="#cb17-249" tabindex="-1"></a><span class="co">#&gt; 86                              &lt;NA&gt;</span></span>
+<span id="cb17-250"><a href="#cb17-250" tabindex="-1"></a><span class="co">#&gt; 89       custom_high_score_surcharge</span></span>
+<span id="cb17-251"><a href="#cb17-251" tabindex="-1"></a><span class="co">#&gt; 90  legacy_composite_risk_adjustment</span></span>
+<span id="cb17-252"><a href="#cb17-252" tabindex="-1"></a><span class="co">#&gt; 98                              &lt;NA&gt;</span></span>
+<span id="cb17-253"><a href="#cb17-253" tabindex="-1"></a><span class="co">#&gt; 101      custom_high_score_surcharge</span></span>
+<span id="cb17-254"><a href="#cb17-254" tabindex="-1"></a><span class="co">#&gt; 102 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-255"><a href="#cb17-255" tabindex="-1"></a><span class="co">#&gt; 109                             &lt;NA&gt;</span></span>
+<span id="cb17-256"><a href="#cb17-256" tabindex="-1"></a><span class="co">#&gt; 112      custom_high_score_surcharge</span></span>
+<span id="cb17-257"><a href="#cb17-257" tabindex="-1"></a><span class="co">#&gt; 113 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-258"><a href="#cb17-258" tabindex="-1"></a><span class="co">#&gt; 121                             &lt;NA&gt;</span></span>
+<span id="cb17-259"><a href="#cb17-259" tabindex="-1"></a><span class="co">#&gt; 124      custom_high_score_surcharge</span></span>
+<span id="cb17-260"><a href="#cb17-260" tabindex="-1"></a><span class="co">#&gt; 125 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-261"><a href="#cb17-261" tabindex="-1"></a><span class="co">#&gt; 132                             &lt;NA&gt;</span></span>
+<span id="cb17-262"><a href="#cb17-262" tabindex="-1"></a><span class="co">#&gt; 135      custom_high_score_surcharge</span></span>
+<span id="cb17-263"><a href="#cb17-263" tabindex="-1"></a><span class="co">#&gt; 136 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-264"><a href="#cb17-264" tabindex="-1"></a><span class="co">#&gt; 144                             &lt;NA&gt;</span></span>
+<span id="cb17-265"><a href="#cb17-265" tabindex="-1"></a><span class="co">#&gt; 147      custom_high_score_surcharge</span></span>
+<span id="cb17-266"><a href="#cb17-266" tabindex="-1"></a><span class="co">#&gt; 148 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-267"><a href="#cb17-267" tabindex="-1"></a><span class="co">#&gt; 155                             &lt;NA&gt;</span></span>
+<span id="cb17-268"><a href="#cb17-268" tabindex="-1"></a><span class="co">#&gt; 158      custom_high_score_surcharge</span></span>
+<span id="cb17-269"><a href="#cb17-269" tabindex="-1"></a><span class="co">#&gt; 159 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-270"><a href="#cb17-270" tabindex="-1"></a><span class="co">#&gt; 167                             &lt;NA&gt;</span></span>
+<span id="cb17-271"><a href="#cb17-271" tabindex="-1"></a><span class="co">#&gt; 170      custom_high_score_surcharge</span></span>
+<span id="cb17-272"><a href="#cb17-272" tabindex="-1"></a><span class="co">#&gt; 171 legacy_composite_risk_adjustment</span></span>
+<span id="cb17-273"><a href="#cb17-273" tabindex="-1"></a><span class="co">#&gt; 178                             &lt;NA&gt;</span></span>
+<span id="cb17-274"><a href="#cb17-274" tabindex="-1"></a><span class="co">#&gt; 181      custom_high_score_surcharge</span></span>
+<span id="cb17-275"><a href="#cb17-275" tabindex="-1"></a><span class="co">#&gt; 182 legacy_composite_risk_adjustment</span></span></code></pre></div>
+<p>For the interpolation step, the trace records the lower and upper
+vehicle-value points, their factor values, and the interpolation weight.
+For custom functions, the trace records the function name and the value
+applied to the running premium.</p>
+<p>A complete explanation for one vehicle and coverage can also be
+requested:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">explain_rating</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="at">rating_result =</span> vehicle_result,</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="at">row_number =</span> <span class="dv">1</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">coverage =</span> <span class="st">&quot;BI&quot;</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="co">#&gt;    row_number record_id coverage step_number                        term_name</span></span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&gt; 1           1        V1       BI           1                        base_rate</span></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a><span class="co">#&gt; 2           1        V1       BI           2                        territory</span></span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a><span class="co">#&gt; 3           1        V1       BI           3            average_driver_factor</span></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="co">#&gt; 4           1        V1       BI           4                           credit</span></span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a><span class="co">#&gt; 5           1        V1       BI           5               underwriting_level</span></span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a><span class="co">#&gt; 6           1        V1       BI           6             vehicle_value_factor</span></span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a><span class="co">#&gt; 7           1        V1       BI           7                 geo_score_charge</span></span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a><span class="co">#&gt; 8           1        V1       BI           8               mileage_adjustment</span></span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a><span class="co">#&gt; 9           1        V1       BI           9      custom_high_score_surcharge</span></span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a><span class="co">#&gt; 10          1        V1       BI          10 legacy_composite_risk_adjustment</span></span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a><span class="co">#&gt; 11          1        V1       BI          11                      expense_fee</span></span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a><span class="co">#&gt;           value_source          calculation_type applied_value</span></span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a><span class="co">#&gt; 1        factor_lookup            multiplicative    220.000000</span></span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a><span class="co">#&gt; 2        factor_lookup            multiplicative      0.900000</span></span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a><span class="co">#&gt; 3          input_value            multiplicative      1.271214</span></span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a><span class="co">#&gt; 4        factor_lookup            multiplicative      0.900000</span></span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a><span class="co">#&gt; 5        factor_lookup            multiplicative      0.920000</span></span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a><span class="co">#&gt; 6  interpolated_lookup            multiplicative      0.962500</span></span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a><span class="co">#&gt; 7        factor_lookup       continuous_additive      4.000000</span></span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a><span class="co">#&gt; 8        factor_lookup continuous_multiplicative      1.032000</span></span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a><span class="co">#&gt; 9      custom_function            multiplicative      1.000000</span></span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a><span class="co">#&gt; 10     custom_function            multiplicative      1.000000</span></span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a><span class="co">#&gt; 11       factor_lookup                  additive     18.000000</span></span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a><span class="co">#&gt;    value_before_step value_after_step</span></span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a><span class="co">#&gt; 1                 NA         220.0000</span></span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a><span class="co">#&gt; 2           220.0000         198.0000</span></span>
+<span id="cb18-33"><a href="#cb18-33" tabindex="-1"></a><span class="co">#&gt; 3           198.0000         251.7004</span></span>
+<span id="cb18-34"><a href="#cb18-34" tabindex="-1"></a><span class="co">#&gt; 4           251.7004         226.5303</span></span>
+<span id="cb18-35"><a href="#cb18-35" tabindex="-1"></a><span class="co">#&gt; 5           226.5303         208.4079</span></span>
+<span id="cb18-36"><a href="#cb18-36" tabindex="-1"></a><span class="co">#&gt; 6           208.4079         200.5926</span></span>
+<span id="cb18-37"><a href="#cb18-37" tabindex="-1"></a><span class="co">#&gt; 7           200.5926         204.5926</span></span>
+<span id="cb18-38"><a href="#cb18-38" tabindex="-1"></a><span class="co">#&gt; 8           204.5926         211.1396</span></span>
+<span id="cb18-39"><a href="#cb18-39" tabindex="-1"></a><span class="co">#&gt; 9           211.1396         211.1396</span></span>
+<span id="cb18-40"><a href="#cb18-40" tabindex="-1"></a><span class="co">#&gt; 10          211.1396         211.1396</span></span>
+<span id="cb18-41"><a href="#cb18-41" tabindex="-1"></a><span class="co">#&gt; 11          211.1396         229.1000</span></span></code></pre></div>
+</div>
+<div id="apply-rate-change-caps" class="section level2">
+<h2>Apply rate-change caps</h2>
+<p>Rate capping is applied after the indicated premium has been
+calculated.</p>
+<p>For this compact example, the prior premiums are deliberately
+constructed so that only a few vehicle/coverage records fall outside the
+permitted range. This makes the capping behavior visible without turning
+the example into a large renewal analysis.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>bi_change_targets <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>  <span class="fl">1.05</span>, <span class="fl">1.02</span>, <span class="fl">1.25</span>, <span class="fl">0.98</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="fl">1.00</span>, <span class="fl">1.03</span>, <span class="fl">0.85</span>, <span class="fl">1.04</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>)</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>cl_change_targets <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>  <span class="fl">1.04</span>, <span class="fl">0.95</span>, <span class="fl">1.03</span>, <span class="fl">1.22</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="fl">1.00</span>, <span class="fl">1.01</span>, <span class="fl">0.92</span>, <span class="fl">1.02</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>)</span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>prior_vehicle_premium <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="at">vehicle_id =</span> rated_vehicles<span class="sc">$</span>vehicle_id,</span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>  <span class="at">prior_BI =</span> rated_vehicles<span class="sc">$</span>indicated_BI <span class="sc">/</span> bi_change_targets,</span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>  <span class="at">prior_CL =</span> rated_vehicles<span class="sc">$</span>indicated_CL <span class="sc">/</span> cl_change_targets,</span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a>)</span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" tabindex="-1"></a>rated_vehicles_capped <span class="ot">&lt;-</span> <span class="fu">apply_caps</span>(</span>
+<span id="cb19-19"><a href="#cb19-19" tabindex="-1"></a>  <span class="at">rating_data =</span> rated_vehicles,</span>
+<span id="cb19-20"><a href="#cb19-20" tabindex="-1"></a>  <span class="at">prior_data =</span> prior_vehicle_premium,</span>
+<span id="cb19-21"><a href="#cb19-21" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb19-22"><a href="#cb19-22" tabindex="-1"></a>  <span class="at">coverages =</span> coverages,</span>
+<span id="cb19-23"><a href="#cb19-23" tabindex="-1"></a>  <span class="at">max_increase =</span> <span class="fl">0.15</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" tabindex="-1"></a>  <span class="at">max_decrease =</span> <span class="fl">0.10</span></span>
+<span id="cb19-25"><a href="#cb19-25" tabindex="-1"></a>)</span>
+<span id="cb19-26"><a href="#cb19-26" tabindex="-1"></a></span>
+<span id="cb19-27"><a href="#cb19-27" tabindex="-1"></a>rated_vehicles_capped<span class="sc">$</span>cap_applied_BI <span class="ot">&lt;-</span></span>
+<span id="cb19-28"><a href="#cb19-28" tabindex="-1"></a>  <span class="fu">abs</span>(</span>
+<span id="cb19-29"><a href="#cb19-29" tabindex="-1"></a>    rated_vehicles_capped<span class="sc">$</span>capped_BI <span class="sc">-</span></span>
+<span id="cb19-30"><a href="#cb19-30" tabindex="-1"></a>      rated_vehicles_capped<span class="sc">$</span>indicated_BI</span>
+<span id="cb19-31"><a href="#cb19-31" tabindex="-1"></a>  ) <span class="sc">&gt;</span> <span class="fl">1e-8</span></span>
+<span id="cb19-32"><a href="#cb19-32" tabindex="-1"></a></span>
+<span id="cb19-33"><a href="#cb19-33" tabindex="-1"></a>rated_vehicles_capped<span class="sc">$</span>cap_applied_CL <span class="ot">&lt;-</span></span>
+<span id="cb19-34"><a href="#cb19-34" tabindex="-1"></a>  <span class="fu">abs</span>(</span>
+<span id="cb19-35"><a href="#cb19-35" tabindex="-1"></a>    rated_vehicles_capped<span class="sc">$</span>capped_CL <span class="sc">-</span></span>
+<span id="cb19-36"><a href="#cb19-36" tabindex="-1"></a>      rated_vehicles_capped<span class="sc">$</span>indicated_CL</span>
+<span id="cb19-37"><a href="#cb19-37" tabindex="-1"></a>  ) <span class="sc">&gt;</span> <span class="fl">1e-8</span></span>
+<span id="cb19-38"><a href="#cb19-38" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" tabindex="-1"></a>rated_vehicles_capped[</span>
+<span id="cb19-40"><a href="#cb19-40" tabindex="-1"></a>  ,</span>
+<span id="cb19-41"><a href="#cb19-41" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb19-42"><a href="#cb19-42" tabindex="-1"></a>    <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb19-43"><a href="#cb19-43" tabindex="-1"></a>    <span class="st">&quot;prior_BI&quot;</span>,</span>
+<span id="cb19-44"><a href="#cb19-44" tabindex="-1"></a>    <span class="st">&quot;indicated_BI&quot;</span>,</span>
+<span id="cb19-45"><a href="#cb19-45" tabindex="-1"></a>    <span class="st">&quot;capped_BI&quot;</span>,</span>
+<span id="cb19-46"><a href="#cb19-46" tabindex="-1"></a>    <span class="st">&quot;cap_applied_BI&quot;</span>,</span>
+<span id="cb19-47"><a href="#cb19-47" tabindex="-1"></a>    <span class="st">&quot;prior_CL&quot;</span>,</span>
+<span id="cb19-48"><a href="#cb19-48" tabindex="-1"></a>    <span class="st">&quot;indicated_CL&quot;</span>,</span>
+<span id="cb19-49"><a href="#cb19-49" tabindex="-1"></a>    <span class="st">&quot;capped_CL&quot;</span>,</span>
+<span id="cb19-50"><a href="#cb19-50" tabindex="-1"></a>    <span class="st">&quot;cap_applied_CL&quot;</span></span>
+<span id="cb19-51"><a href="#cb19-51" tabindex="-1"></a>  )</span>
+<span id="cb19-52"><a href="#cb19-52" tabindex="-1"></a>]</span>
+<span id="cb19-53"><a href="#cb19-53" tabindex="-1"></a><span class="co">#&gt;   vehicle_id prior_BI indicated_BI capped_BI cap_applied_BI prior_CL</span></span>
+<span id="cb19-54"><a href="#cb19-54" tabindex="-1"></a><span class="co">#&gt; 1         V1 218.1905        229.1  229.1000          FALSE 173.7500</span></span>
+<span id="cb19-55"><a href="#cb19-55" tabindex="-1"></a><span class="co">#&gt; 2         V2 315.0000        321.3  321.3000          FALSE   0.0000</span></span>
+<span id="cb19-56"><a href="#cb19-56" tabindex="-1"></a><span class="co">#&gt; 3         V3 375.9200        469.9  432.3080           TRUE 297.0874</span></span>
+<span id="cb19-57"><a href="#cb19-57" tabindex="-1"></a><span class="co">#&gt; 4         V4 401.9388        393.9  393.9000          FALSE 225.3279</span></span>
+<span id="cb19-58"><a href="#cb19-58" tabindex="-1"></a><span class="co">#&gt; 5         V5 308.7000        308.7  308.7000          FALSE   0.0000</span></span>
+<span id="cb19-59"><a href="#cb19-59" tabindex="-1"></a><span class="co">#&gt; 6         V6 794.5631        818.4  818.4000          FALSE 551.4851</span></span>
+<span id="cb19-60"><a href="#cb19-60" tabindex="-1"></a><span class="co">#&gt; 7         V7 566.2353        481.3  509.6118           TRUE 364.3478</span></span>
+<span id="cb19-61"><a href="#cb19-61" tabindex="-1"></a><span class="co">#&gt; 8         V8 289.4231        301.0  301.0000          FALSE   0.0000</span></span>
+<span id="cb19-62"><a href="#cb19-62" tabindex="-1"></a><span class="co">#&gt;   indicated_CL capped_CL cap_applied_CL</span></span>
+<span id="cb19-63"><a href="#cb19-63" tabindex="-1"></a><span class="co">#&gt; 1        180.7   180.700          FALSE</span></span>
+<span id="cb19-64"><a href="#cb19-64" tabindex="-1"></a><span class="co">#&gt; 2          0.0     0.000          FALSE</span></span>
+<span id="cb19-65"><a href="#cb19-65" tabindex="-1"></a><span class="co">#&gt; 3        306.0   306.000          FALSE</span></span>
+<span id="cb19-66"><a href="#cb19-66" tabindex="-1"></a><span class="co">#&gt; 4        274.9   259.127           TRUE</span></span>
+<span id="cb19-67"><a href="#cb19-67" tabindex="-1"></a><span class="co">#&gt; 5          0.0     0.000          FALSE</span></span>
+<span id="cb19-68"><a href="#cb19-68" tabindex="-1"></a><span class="co">#&gt; 6        557.0   557.000          FALSE</span></span>
+<span id="cb19-69"><a href="#cb19-69" tabindex="-1"></a><span class="co">#&gt; 7        335.2   335.200          FALSE</span></span>
+<span id="cb19-70"><a href="#cb19-70" tabindex="-1"></a><span class="co">#&gt; 8          0.0     0.000          FALSE</span></span></code></pre></div>
+<p>To focus only on records where at least one coverage was capped:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>rated_vehicles_capped[</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>  rated_vehicles_capped<span class="sc">$</span>cap_applied_BI <span class="sc">|</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>    rated_vehicles_capped<span class="sc">$</span>cap_applied_CL,</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>    <span class="st">&quot;vehicle_id&quot;</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>    <span class="st">&quot;prior_BI&quot;</span>,</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    <span class="st">&quot;indicated_BI&quot;</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>    <span class="st">&quot;capped_BI&quot;</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>    <span class="st">&quot;prior_CL&quot;</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>    <span class="st">&quot;indicated_CL&quot;</span>,</span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>    <span class="st">&quot;capped_CL&quot;</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>  )</span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>]</span>
+<span id="cb20-14"><a href="#cb20-14" tabindex="-1"></a><span class="co">#&gt;   vehicle_id prior_BI indicated_BI capped_BI prior_CL indicated_CL capped_CL</span></span>
+<span id="cb20-15"><a href="#cb20-15" tabindex="-1"></a><span class="co">#&gt; 3         V3 375.9200        469.9  432.3080 297.0874        306.0   306.000</span></span>
+<span id="cb20-16"><a href="#cb20-16" tabindex="-1"></a><span class="co">#&gt; 4         V4 401.9388        393.9  393.9000 225.3279        274.9   259.127</span></span>
+<span id="cb20-17"><a href="#cb20-17" tabindex="-1"></a><span class="co">#&gt; 7         V7 566.2353        481.3  509.6118 364.3478        335.2   335.200</span></span></code></pre></div>
+</div>
+<div id="what-this-example-demonstrates" class="section level2">
+<h2>What this example demonstrates</h2>
+<p>This vignette uses one coherent rating workflow to demonstrate
+several parts of <code>ratingtables</code>:</p>
+<ul>
+<li>normalized factor tables;</li>
+<li>coverage-specific rating specifications;</li>
+<li>multiplicative driver factors;</li>
+<li>driver/entity rating;</li>
+<li>averaging entity-level factors to a parent household;</li>
+<li>joining aggregated factors back to vehicle records;</li>
+<li>a coverage-specific base rate;</li>
+<li>exact factor lookup;</li>
+<li>an input-value step;</li>
+<li>linear interpolation;</li>
+<li>continuous additive calculation;</li>
+<li>continuous multiplicative calculation;</li>
+<li>two different custom-function patterns;</li>
+<li>an additive expense fee;</li>
+<li>an optional Collision deductible/coverage-option factor;</li>
+<li>final-step rounding;</li>
+<li>step-by-step trace output; and</li>
+<li>post-rating rate-change caps.</li>
+</ul>
+<p>The standard table-driven calculations should generally remain the
+preferred representation when they are sufficient. Custom functions are
+most useful as a controlled escape hatch for logic that is genuinely
+difficult to represent cleanly in the ordinary specification,
+particularly when recreating or validating an existing rater.</p>
+<p>Because the factor data, calculation specification, custom code, and
+example rating records are all ordinary R objects, each component can be
+inspected, tested, version-controlled, and modified independently.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

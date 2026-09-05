@@ -20,7 +20,9 @@ A data frame containing the original rating data plus one
 }
 \description{
 Apply a rating plan to every row and coverage in a policy-level data frame,
-returning only the resulting rated data.
+returning only the resulting rated data. Plans using supported standard
+rating operations are evaluated with a vectorized batch engine. Plans using
+unsupported operations fall back to the general trace-capable engine.
 }
 \examples{
 ex <- example_rating_plan()

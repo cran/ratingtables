@@ -18,8 +18,9 @@ A data frame containing the original entity data and calculated
 indicated values.
 }
 \description{
-Backward-compatible wrapper around \code{\link[=rate_entities]{rate_entities()}} that returns only
-the rated entity data and omits the trace and plan components.
+Score entity records without constructing trace output. This uses
+\code{\link[=rate_policies]{rate_policies()}} so supported standard plans can use the optimized
+vectorized batch-rating engine.
 }
 \examples{
 ex <- example_rating_plan()

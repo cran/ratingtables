@@ -39,7 +39,10 @@ identifier column. Its value is stored as \code{record_id} in trace output; if
 the column is absent, the source row number is used.}
 
 \item{custom_functions}{A named list of custom rating functions referenced
-by \code{custom_function} rows in the rating specification.}
+by rating-specification rows with \code{value_source = "custom_function"}.
+Each function is called with \code{row}, \code{coverage}, \code{current_premium}, \code{plan},
+\code{spec_row}, and \code{lookup}. See \link{custom_rating_functions} for the function
+contract and examples.}
 
 \item{validate}{Logical. If \code{TRUE}, run \code{\link[=validate_rating_plan]{validate_rating_plan()}} before
 returning the plan.}
@@ -49,10 +52,19 @@ returning the plan.}
 \value{
 A \code{rating_plan} object containing the normalized factor table,
 rating specification, coverages, configuration, custom functions, and
-metadata.
+metadata. The object also contains an internal precompiled cache used by
+the standard non-trace batch-rating engine. The cache is an implementation
+detail and should not be edited directly.
 }
 \description{
 Create a rating plan
+}
+\details{
+Exact lookup structure and standard rating-step metadata are precompiled
+when the plan is created. Value-only edits to \code{plan$factor_table$term_value}
+can reuse the compiled lookup structure. If lookup keys or the rating
+specification are changed, \code{\link[=rate_policies]{rate_policies()}} detects the structural change
+and rebuilds the internal cache before rating.
 }
 \examples{
 ex <- example_rating_plan()

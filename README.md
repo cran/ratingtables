@@ -11,7 +11,7 @@ ordinary programmatic manipulation.
 
 ## Installation
 
-Once `ratingtables` is available on CRAN, install the released version with:
+`ratingtables` is available on CRAN. Install the released version with:
 
 ```r
 install.packages("ratingtables")
@@ -44,24 +44,27 @@ plan <- example$plan
 policies <- example$policies
 ```
 
-Rate the policies and retain the calculation trace:
+Rate the policies:
+
+```r
+rated <- rate_policies(
+  rating_data = policies,
+  plan = plan
+)
+
+rated
+```
+
+For audit, reconciliation, or detailed calculation review, rate the same
+policies while retaining the step-by-step trace:
 
 ```r
 result <- rate_policies_with_trace(
   rating_data = policies,
   plan = plan
 )
-```
 
-Inspect the rated policy data:
-
-```r
 result$rated_data
-```
-
-Inspect the normalized step-by-step trace:
-
-```r
 head(result$term_trace)
 ```
 
@@ -101,11 +104,11 @@ validate, compare, version, reproduce, and manipulate programmatically.
 
 The same rating algorithm may be represented several times:
 
-- in the actuarial desktop rater;
-- in filing or implementation documentation;
-- in a production policy system;
-- in validation workbooks;
-- and in ad hoc testing tools.
+* in the actuarial desktop rater;
+* in filing or implementation documentation;
+* in a production policy system;
+* in validation workbooks;
+* and in ad hoc testing tools.
 
 Each separate representation creates another opportunity for transcription
 errors, inconsistent assumptions, outdated factors, and disagreements over
@@ -146,10 +149,10 @@ Python, and other widely used programming languages.
 `ratingtables` allows an actuarial team to begin modernizing and standardizing
 its rating programs immediately:
 
-- without waiting for a procurement cycle;
-- without purchasing a proprietary development environment;
-- without prolonged onboarding in a non-transferable configuration language;
-- and without waiting for a complete production-system implementation.
+* without waiting for a procurement cycle;
+* without purchasing a proprietary development environment;
+* without prolonged onboarding in a non-transferable configuration language;
+* and without waiting for a complete production-system implementation.
 
 This standardization remains useful when an organization ultimately plans to
 implement a proprietary rating platform. A normalized and executable reference
@@ -235,37 +238,89 @@ plan <- new_rating_plan(
 The completed plan can then be applied to policy or entity data:
 
 ```r
-result <- rate_policies_with_trace(
+rated <- rate_policies(
   rating_data = policies,
   plan = plan
 )
 ```
 
+Use `rate_policies_with_trace()` when detailed step-level audit output is
+required.
+
+### Custom calculations
+
+Rating steps that cannot be represented directly by the standard
+calculation types can use ordinary R functions.
+
+A custom function is registered in `new_rating_plan()` and referenced
+from the rating specification using `value_source = "custom_function"`.
+
+See `?custom_rating_functions` for the function interface and a
+worked example.
+
 ## Key capabilities
 
 `ratingtables` currently provides support for:
 
-- normalized long-form rating-factor tables;
-- explicit ordered rating specifications;
-- coverage-specific calculation orders;
-- exact factor lookup;
-- linearly interpolated factor lookup;
-- one-way factors and multi-variable interactions;
-- multiplicative, additive, and continuous rating steps;
-- custom calculation functions;
-- explicit or automatic rate-set selection;
-- policy-level and entity-level rating;
-- generic entity aggregation, including means and sums;
-- optional rounding rules;
-- step-by-step normalized trace output;
-- trace reshaping for human review;
-- factor-table and rating-plan validation;
-- duplicate factor-key detection;
-- premium or rate-change capping helpers.
+* normalized long-form rating-factor tables;
+* explicit ordered rating specifications;
+* coverage-specific calculation orders;
+* exact factor lookup;
+* linearly interpolated factor lookup;
+* one-way factors and multi-variable interactions;
+* multiplicative, additive, and continuous rating steps;
+* custom calculation functions;
+* explicit or automatic rate-set selection;
+* policy-level and entity-level rating;
+* generic entity aggregation, including means and sums;
+* optional rounding rules;
+* step-by-step normalized trace output;
+* trace reshaping for human review;
+* factor-table and rating-plan validation;
+* duplicate factor-key detection;
+* premium or rate-change capping helpers.
 
 The core execution functions use base R and accept ordinary data frames. The
 package does not prescribe how rating tables must be stored, edited, displayed,
 or deployed.
+
+## Performance
+
+`ratingtables` separates high-throughput batch rating from detailed trace
+generation.
+
+For standard plans using exact factor lookups, input values, and the built-in
+multiplicative, additive, continuous, replacement, and rounding operations,
+`rate_policies()` uses an optimized vectorized batch engine. Exact lookup
+structures and rating-step metadata are precompiled when a `rating_plan` is
+created, common rating-data representations are cached once per batch, and
+exact factor matching uses keyed vector lookups.
+
+Entity workflows also use grouped aggregation and direct keyed joins for common
+cases. Use `score_entity_rows()` when only rated entity values are needed; use
+`rate_entities()` when detailed entity-level trace output is required.
+
+An illustrative benchmark using a staged driver-to-household-to-vehicle rating
+workflow produced the following results on Windows x86-64 with R 4.6.1:
+
+| Households | Driver rows | Vehicle rows |  Elapsed |
+| ---------: | ----------: | -----------: | -------: |
+|      1,000 |       1,934 |        1,526 | 0.03 sec |
+|      6,000 |      11,673 |        9,233 | 0.11 sec |
+|     50,000 |      97,022 |       76,028 | 1.14 sec |
+|    200,000 |     388,388 |      303,995 | 4.34 sec |
+
+These timings are illustrative rather than guarantees. Performance depends on
+hardware, R version, rating-plan structure, portfolio composition, and the
+operations used.
+
+Detailed trace generation intentionally performs substantially more work
+because it retains step-level calculation information for every rated record.
+For large portfolio rerating, rate revision, or scenario analysis, use the
+non-trace functions unless the trace itself is required.
+
+The reproducible benchmark script is available in
+`scripts/benchmark_rating_performance.R`.
 
 ## Use cases
 
@@ -351,11 +406,11 @@ Some rating values originate below the policy level.
 
 Examples include:
 
-- multiple drivers whose factors are averaged;
-- boats whose premiums are summed;
-- scheduled items whose premiums are summed;
-- multiple vehicles or locations;
-- endorsements attached to a parent policy.
+* multiple drivers whose factors are averaged;
+* boats whose premiums are summed;
+* scheduled items whose premiums are summed;
+* multiple vehicles or locations;
+* endorsements attached to a parent policy.
 
 The generic entity workflow is:
 
@@ -375,9 +430,13 @@ Join aggregated values to parent records
 Execute parent rating plan
 ```
 
+For large entity books, `score_entity_rows()` is the normal batch-scoring path.
+`rate_entities()` additionally constructs detailed trace output.
+
 The principal functions are:
 
 ```r
+score_entity_rows()
 rate_entities()
 aggregate_entity_values()
 join_entity_values()
@@ -392,6 +451,13 @@ Run the installed package demo with:
 
 ```r
 demo("rating_example", package = "ratingtables")
+```
+
+For a more complex rating example showcasing this package's flexibility,
+please see the vignette.
+
+```r
+vignette("rating-plan-walkthrough", package = "ratingtables") 
 ```
 
 Additional development examples are available in the repository's `scripts/`
@@ -413,12 +479,12 @@ workflows are functional. The public API may continue to evolve before version
 Feedback from actuaries, pricing analysts, implementation teams, and other
 potential users is welcome, particularly regarding:
 
-- rating structures that are difficult to represent;
-- trace and audit requirements;
-- implementation-validation workflows;
-- entity-level rating needs;
-- interpolation and calculation-order behavior;
-- usability of the factor-table and specification formats.
+* rating structures that are difficult to represent;
+* trace and audit requirements;
+* implementation-validation workflows;
+* entity-level rating needs;
+* interpolation and calculation-order behavior;
+* usability of the factor-table and specification formats.
 
 ## Contributing
 

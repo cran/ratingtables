@@ -1,7 +1,9 @@
 #' Rate policy records
 #'
 #' Apply a rating plan to every row and coverage in a policy-level data frame,
-#' returning only the resulting rated data.
+#' returning only the resulting rated data. Plans using supported standard
+#' rating operations are evaluated with a vectorized batch engine. Plans using
+#' unsupported operations fall back to the general trace-capable engine.
 #'
 #' @param rating_data A data frame containing one row per policy or rating
 #'   record.
@@ -22,7 +24,21 @@
 #'
 #' @export
 rate_policies <- function(rating_data, plan, validate = TRUE) {
-  rate_policies_with_trace(rating_data, plan, validate = validate)$rated_data
+  if (.can_vectorize_plan(plan)) {
+    return(
+      .rate_policies_vectorized(
+        rating_data = rating_data,
+        plan = plan,
+        validate = validate
+      )
+    )
+  }
+
+  rate_policies_with_trace(
+    rating_data,
+    plan,
+    validate = validate
+  )$rated_data
 }
 
 #' Rate policy records with trace output

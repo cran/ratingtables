@@ -20,7 +20,9 @@ columns from \code{entity_values}.
 }
 \description{
 Left-join aggregated entity-level values back to the parent-level rating
-data.
+data. When the entity-side join keys are unique and there are no overlapping
+non-key column names, a direct keyed match is used. More complicated joins
+fall back to base \code{\link[=merge]{merge()}} to preserve general behavior.
 }
 \examples{
 policies <- data.frame(
